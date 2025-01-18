@@ -2,16 +2,38 @@ from time import sleep
 import cv2
 
 # Used to determine the cutoff points for the canny thresholds.
-MAXCUTOFF, MINCUTOFF = 0.05, 0.6
-
+MAXCUTOFF, MINCUTOFF = 0.08, 0.95
+MAX_WIDTH = MAX_HEIGHT = 1000
 
 def main():
-    imageLoc = "C:\\Users\\gamec\\Downloads\\JPEG_007.jpg"
+    imageLoc = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"
     image = cv2.imread(imageLoc)
     outline(image)
 
+def scaleDown(image):
 
-def outline(image):
+    # Get diemensions
+    h,w = image.shape[:2]
+
+    #If image is within size send back.
+    if h <= MAX_HEIGHT and w <= MAX_WIDTH:
+        return image
+
+    # Get ratio
+    ratio = h / w
+
+    if ratio > 1:
+        newWidth = int(w * ratio)
+        return cv2.resize(image, (newWidth, MAX_HEIGHT))
+    else:
+        newHeight = int(h*ratio)
+        return cv2.resize(image,(MAX_WIDTH, newHeight))
+
+
+def outline(ogImage):
+
+    #Get image to a resonable size.
+    image = scaleDown(ogImage)
 
     # Getting the weak and strong threshold for the canny function
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
