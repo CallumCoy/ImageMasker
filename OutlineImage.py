@@ -1,13 +1,13 @@
 from time import sleep
-import cv2
+import cv2 as cv
 
 # Used to determine the cutoff points for the canny thresholds.
 MAXCUTOFF, MINCUTOFF = 0.08, 0.95
-MAX_WIDTH = MAX_HEIGHT = 1000
+MAX_WIDTH = MAX_HEIGHT = 100
 
 def main():
     imageLoc = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"
-    image = cv2.imread(imageLoc)
+    image = cv.imread(imageLoc)
     outline(image)
 
 def scaleDown(image):
@@ -24,11 +24,15 @@ def scaleDown(image):
 
     if ratio > 1:
         newWidth = int(w * ratio)
-        return cv2.resize(image, (newWidth, MAX_HEIGHT))
+        return cv.resize(image, (newWidth, MAX_HEIGHT))
     else:
         newHeight = int(h*ratio)
-        return cv2.resize(image,(MAX_WIDTH, newHeight))
+        return cv.resize(image,(MAX_WIDTH, newHeight))
 
+def tilize(image):
+    M = N = 50
+    tiles = [image[x:x+M,y:y+N] for x in range(0,image.shape[0],M) for y in range(0,image.shape[1],N)]
+    return tiles
 
 def outline(ogImage):
 
@@ -36,8 +40,8 @@ def outline(ogImage):
     image = scaleDown(ogImage)
 
     # Getting the weak and strong threshold for the canny function
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    histogram = cv2.calcHist([gray], [0], None, [256], [0, 256])
+    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    histogram = cv.calcHist([gray], [0], None, [256], [0, 256])
 
     # Maximum number of cells that can be drawn
     cutoff = MAXCUTOFF * image.shape[0] * image.shape[1]
@@ -57,12 +61,15 @@ def outline(ogImage):
             break
 
     #  Produces edge limit
-    edges = cv2.Canny(gray, lowThresh, maxThresh)
+    edges = cv.Canny(gray, lowThresh, maxThresh)
+
+    tiles = tilize(edges)
 
     # Shows initial image and results, and waitngs for end key
-    cv2.imshow("ogImg", image)
-    cv2.imshow("edges", edges)
-    cv2.waitKey(0)
+    cv.imshow("part", tiles[len(tiles)//2])
+    cv.imshow("ogImg", image)
+    cv.imshow("edges", edges)
+    cv.waitKey(0)
 
     return(gray)
 
