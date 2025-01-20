@@ -3,7 +3,7 @@ import cv2 as cv
 
 # Used to determine the cutoff points for the canny thresholds.
 MAXCUTOFF, MINCUTOFF = 0.08, 0.95
-MAX_WIDTH = MAX_HEIGHT = 100
+MAX_WIDTH = MAX_HEIGHT = 200
 
 def main():
     imageLoc = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"
@@ -23,10 +23,10 @@ def scaleDown(image):
     ratio = h / w
 
     if ratio > 1:
-        newWidth = int(w * ratio)
+        newWidth = int(MAX_WIDTH * ratio)
         return cv.resize(image, (newWidth, MAX_HEIGHT))
     else:
-        newHeight = int(h*ratio)
+        newHeight = int(MAX_HEIGHT * ratio)
         return cv.resize(image,(MAX_WIDTH, newHeight))
 
 def tilize(image):
