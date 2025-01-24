@@ -5,17 +5,19 @@ import cv2 as cv
 MAXCUTOFF, MINCUTOFF = 0.08, 0.95
 MAX_WIDTH = MAX_HEIGHT = 200
 
+
 def main():
     imageLoc = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"
     image = cv.imread(imageLoc)
     outline(image)
 
+
 def scaleDown(image):
 
     # Get diemensions
-    h,w = image.shape[:2]
+    h, w = image.shape[:2]
 
-    #If image is within size send back.
+    # If image is within size send back.
     if h <= MAX_HEIGHT and w <= MAX_WIDTH:
         return image
 
@@ -27,16 +29,19 @@ def scaleDown(image):
         return cv.resize(image, (newWidth, MAX_HEIGHT))
     else:
         newHeight = int(MAX_HEIGHT * ratio)
-        return cv.resize(image,(MAX_WIDTH, newHeight))
+        return cv.resize(image, (MAX_WIDTH, newHeight))
+
 
 def tilize(image):
     M = N = 50
-    tiles = [image[x:x+M,y:y+N] for x in range(0,image.shape[0],M) for y in range(0,image.shape[1],N)]
+    tiles = [image[x:x+M, y:y+N]
+             for x in range(0, image.shape[0], M) for y in range(0, image.shape[1], N)]
     return tiles
+
 
 def outline(ogImage):
 
-    #Get image to a resonable size.
+    # Get image to a resonable size.
     image = scaleDown(ogImage)
 
     # Getting the weak and strong threshold for the canny function
@@ -51,10 +56,10 @@ def outline(ogImage):
     # Goes through historgram
     for i in reversed(range(len(histogram))):
 
-        #adds up the values in histogram
+        # adds up the values in histogram
         count += histogram[i][0]
 
-        #Once max value is reached stop tracking
+        # Once max value is reached stop tracking
         if cutoff < count:
             lowThresh = int(MINCUTOFF * i)
             maxThresh = i
@@ -71,7 +76,7 @@ def outline(ogImage):
     cv.imshow("edges", edges)
     cv.waitKey(0)
 
-    return(gray)
+    return (gray)
 
 
 main()
