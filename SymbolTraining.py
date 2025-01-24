@@ -6,15 +6,20 @@ FONT_SIZE = 1
 
 def main():
 
-    img = createImage("M")
+    img = createImage("H")
     splitImage = imageSplitter(img)
+
+    darkness = blockDarkness(splitImage)
 
     for y in range(splitImage.shape[0]):
         for x in range(splitImage.shape[1]):
-            cv.imshow("Piece" + str(x) + str(y),
-                      cv.resize(splitImage[y, x], None, fx=10, fy=10))
-
+            print(" " + str(darkness[x][y]) + " coords: " + str(x) + ", " + str(y))
+            cv.imshow(str(darkness[y][x])+ " " + str(x) + str (y),
+                      cv.resize(splitImage[y, x], None, fx=60, fy=60))
+    
     cv.waitKey(0)
+            
+
 
 
 def createImage(letter):
@@ -44,6 +49,21 @@ def imageSplitter(img, blocks=(3, 3)):
 
     # Makes an array then sorts it into a 2d array.
     return np.asarray(splitImage, dtype=np.ndarray).reshape(blocks)
+
+
+def blockDarkness(splitLetter):
+    darknessGraph = []
+
+    # Find the average darkness of each square
+    for i in range(len(splitLetter)):
+        tempArray = []
+        for j in range(len(splitLetter[i])):
+            width, height = splitLetter[i][j].shape
+            tempArray.append(int(np.sum(splitLetter[i][j])/(width*height)))
+
+        darknessGraph.append(tempArray)
+
+    return darknessGraph
 
 
 main()
