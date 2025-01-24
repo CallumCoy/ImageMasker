@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 
 FONT_SIZE = 1
-
+MAX_THRESHOLD = 190
 
 def main():
 
@@ -17,6 +17,10 @@ def main():
             cv.imshow(str(darkness[y][x])+ " " + str(x) + str (y),
                       cv.resize(splitImage[y, x], None, fx=60, fy=60))
     
+
+    print(darkness)
+    print(mapArray(darkness))
+
     cv.waitKey(0)
             
 
@@ -64,6 +68,21 @@ def blockDarkness(splitLetter):
         darknessGraph.append(tempArray)
 
     return darknessGraph
+
+def mapArray(DarknessChart):
+    MapChart = []
+    
+
+    # If within threshhold mark with 0 else 1
+    for i in range(len(DarknessChart)):
+        tempArray = []
+        for j in range(len(DarknessChart[i])):
+            tempArray.append(0 if DarknessChart[i][j] > MAX_THRESHOLD else 1)
+
+        MapChart.append(tempArray)
+
+    return MapChart, 
+
 
 
 main()
