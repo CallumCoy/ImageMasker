@@ -5,6 +5,7 @@ FONT_SIZE = 1
 MAX_THRESHOLD = 190
 SYMBOL_INPUT = []
 MAP_CATALOG = dict()
+BASIC_ASCII_CHARS = "@%#*+=-:. "
 
 
 def setSymbols():
@@ -35,6 +36,24 @@ def main():
 
         # Inputs the new data into the map Catalog.
         inputCatalog(mappedArray, darkness, symbol)
+
+
+def getSymbol(bitString, darkness):
+
+    # Use the basic method if it doesn't have a good fit
+    if bitString not in MAP_CATALOG:
+        return BASIC_ASCII_CHARS[darkness//32]
+
+    closestMatch = 255*9
+    idealSymbol = ""
+
+    for symbol in MAP_CATALOG[bitString]:
+        # Chekcs if newest symbol is closer, is so update with the new data
+        if abs(darkness - symbol[0]) < closestMatch:
+            idealSymbol = symbol[1]
+            closestMatch = abs(darkness - symbol[0])
+
+    return idealSymbol
 
 
 def inputCatalog(mappedArray, shadowArray, symbol):
