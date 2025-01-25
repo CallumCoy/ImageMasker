@@ -3,31 +3,53 @@ import numpy as np
 
 FONT_SIZE = 1
 MAX_THRESHOLD = 190
-SYMBOL_INPUT = ["a", "b", "c"]
+SYMBOL_INPUT = []
 MAP_CATALOG = dict()
+
+
+def setSymbols():
+    global SYMBOL_INPUT
+
+    # Inputs all ACII Values
+    for i in range(33, 127):
+        SYMBOL_INPUT.append(chr(i))
 
 
 def main():
 
-    for symbol in SYMBOL_INPUT:
-        img = createImage(symbol)
-        splitImage = imageSplitter(img)
-        darkness = blockDarkness(splitImage)
-        mappedArray = mapArray(darkness)
-        inputCatalog(mappedArray, darkness, symbol)
+    setSymbols()
 
-    print(MAP_CATALOG)
+    for symbol in SYMBOL_INPUT:
+
+        # Creates an image for the current symbol.
+        img = createImage(symbol)
+
+        # Splits the image up, normally into 3x3.
+        splitImage = imageSplitter(img)
+
+        # Assigns each sections a darkness Value.
+        darkness = blockDarkness(splitImage)
+
+        # Assigns each section with a 1 or a 0 depending if it is within the threshold.
+        mappedArray = mapArray(darkness)
+
+        # Inputs the new data into the map Catalog.
+        inputCatalog(mappedArray, darkness, symbol)
 
 
 def inputCatalog(mappedArray, shadowArray, symbol):
     global MAP_CATALOG
+
+    # Gets the overall darkness for this symbol.
     totalDarkness = int(np.sum(shadowArray))
     key = ""
 
+    # Cycles through the array, turning it into a 9 bit string.
     for y in mappedArray:
         for x in y:
             key += str(x)
 
+    # Checks if the key exists, if it does insert the that darkness level doesn't exist, else create the new dict key.
     if key in MAP_CATALOG:
         if totalDarkness not in MAP_CATALOG[key]:
             MAP_CATALOG[key].update({totalDarkness: symbol})
