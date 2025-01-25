@@ -3,27 +3,38 @@ import numpy as np
 
 FONT_SIZE = 1
 MAX_THRESHOLD = 190
+SYMBOL_INPUT = ["a", "b", "c"]
+MAP_CATALOG = dict()
+
 
 def main():
 
-    img = createImage("H")
-    splitImage = imageSplitter(img)
+    for symbol in SYMBOL_INPUT:
+        img = createImage(symbol)
+        splitImage = imageSplitter(img)
+        darkness = blockDarkness(splitImage)
+        mappedArray = mapArray(darkness)
+        inputCatalog(mappedArray, darkness, symbol)
 
-    darkness = blockDarkness(splitImage)
+    print(MAP_CATALOG)
 
-    for y in range(splitImage.shape[0]):
-        for x in range(splitImage.shape[1]):
-            print(" " + str(darkness[x][y]) + " coords: " + str(x) + ", " + str(y))
-            cv.imshow(str(darkness[y][x])+ " " + str(x) + str (y),
-                      cv.resize(splitImage[y, x], None, fx=60, fy=60))
-    
 
-    print(darkness)
-    print(mapArray(darkness))
+def inputCatalog(mappedArray, shadowArray, symbol):
+    global MAP_CATALOG
+    totalDarkness = int(np.sum(shadowArray))
+    key = ""
 
-    cv.waitKey(0)
-            
+    for y in mappedArray:
+        for x in y:
+            key += str(x)
 
+    if key in MAP_CATALOG:
+        if totalDarkness not in MAP_CATALOG[key]:
+            MAP_CATALOG[key].update({totalDarkness: symbol})
+    else:
+        MAP_CATALOG[key] = {totalDarkness: symbol}
+
+    return
 
 
 def createImage(letter):
@@ -69,9 +80,9 @@ def blockDarkness(splitLetter):
 
     return darknessGraph
 
+
 def mapArray(DarknessChart):
     MapChart = []
-    
 
     # If within threshhold mark with 0 else 1
     for i in range(len(DarknessChart)):
@@ -81,8 +92,7 @@ def mapArray(DarknessChart):
 
         MapChart.append(tempArray)
 
-    return MapChart, 
-
+    return MapChart
 
 
 main()
