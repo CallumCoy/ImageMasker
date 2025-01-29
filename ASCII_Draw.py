@@ -1,10 +1,12 @@
 import cv2 as cv
 import numpy as np
 
-MAX_THRESHOLD = 150
+from SymbolTraining import getSymbol
 
-MAX_WIDTH = 600
-MAX_HEIGHT = 1800
+MAX_THRESHOLD = 120
+
+MAX_WIDTH = 300
+MAX_HEIGHT = 900
 
 
 def main():
@@ -13,7 +15,7 @@ def main():
     image = cv.imread(imageLoc)
     rescaledImage = scaleImage(image)
 
-    createText(image)
+    createText(rescaledImage)
 
     cv.imshow("main", image)
     cv.imshow("edges", rescaledImage)
@@ -50,7 +52,7 @@ def tilize(image):
                   for block in horizontalSplit]
 
     # Makes an array then sorts it into a 2d array.
-    return np.asarray(splitImage, dtype=np.ndarray).reshape([w//3, h//3])
+    return np.asarray(splitImage, dtype=np.ndarray).reshape([h//3, w//3])
 
 
 def applyThreshold(tiles):
@@ -76,12 +78,26 @@ def applyThreshold(tiles):
     return mappedRows
 
 
+def drawASCII(image):
+    text = ""
+    for row in image:
+        for tile in row:
+            text += str(getSymbol(tile[0], tile[1]))
+        text += "\n"
+
+    return text
+
+
 def createText(image):
 
     gray = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
 
     tiles = tilize(gray)
-    applyThreshold(tiles)
+    mappedImage = applyThreshold(tiles)
+    ASCIIImage = drawASCII(mappedImage)
+
+    with open("image.txt", "w") as f:
+        f.write(ASCIIImage)
 
 
 main()
