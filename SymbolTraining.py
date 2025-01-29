@@ -42,16 +42,16 @@ def getSymbol(bitString, darkness):
 
     # Use the basic method if it doesn't have a good fit
     if bitString not in MAP_CATALOG:
-        return BASIC_ASCII_CHARS[darkness//32]
+        return BASIC_ASCII_CHARS[darkness//(32*9)]
 
     closestMatch = 255*9
     idealSymbol = ""
 
     for symbol in MAP_CATALOG[bitString]:
         # Chekcs if newest symbol is closer, is so update with the new data
-        if abs(darkness - symbol[0]) < closestMatch:
-            idealSymbol = symbol[1]
-            closestMatch = abs(darkness - symbol[0])
+        if abs(darkness - symbol) < closestMatch:
+            idealSymbol = MAP_CATALOG[bitString][symbol]
+            closestMatch = symbol
 
     return idealSymbol
 
