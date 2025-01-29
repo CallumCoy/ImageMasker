@@ -40,6 +40,9 @@ def image_to_ascii(image_path, new_width=100):
     return ascii_image
 
 # Example usage
-image_path = "C:\\Users\\gamec\\Downloads\\JPEG_007.jpg"  # Replace with your image path
+image_path = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"  # Replace with your image path
 ascii_art = image_to_ascii(image_path)
-print(ascii_art)
+
+with open("image2.txt", "w") as f:
+    f.write(ascii_art)
+
