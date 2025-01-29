@@ -3,7 +3,9 @@ import numpy as np
 
 from SymbolTraining import getSymbol
 
-MAX_THRESHOLD = 120
+
+INVERSE_MODE = False
+MAX_THRESHOLD = 180
 
 MAX_WIDTH = 300
 MAX_HEIGHT = 900
@@ -11,7 +13,7 @@ MAX_HEIGHT = 900
 
 def main():
 
-    imageLoc = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"
+    imageLoc = "C:\\Users\\gamec\\Downloads\\121017.jpg"
     image = cv.imread(imageLoc)
     rescaledImage = scaleImage(image)
 
@@ -58,6 +60,11 @@ def tilize(image):
 def applyThreshold(tiles):
     mappedRows = []
 
+    if INVERSE_MODE:
+        black, white = str(0), str(1)
+    else:
+        white, black = str(0), str(1)
+
     for row in tiles:
 
         # Go through each row, adding the mapped version on each pass
@@ -70,7 +77,7 @@ def applyThreshold(tiles):
             for symbolBit in tile:
                 for pixel in symbolBit:
                     # States the map used to lookup the symbol, and sums up the darkness.
-                    symbolCode += str(0) if pixel < MAX_THRESHOLD else str(1)
+                    symbolCode += black if pixel < MAX_THRESHOLD else white
                     darkness += int(pixel)
             mappedTiles.append([symbolCode, darkness])
         mappedRows.append(mappedTiles)
