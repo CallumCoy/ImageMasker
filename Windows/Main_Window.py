@@ -1,25 +1,7 @@
 import sys
 
-from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton
-
-# Extends the base button class
-
-
-class BaseButton(QPushButton):
-
-    # Initialises some basic aspects of the buttons
-    def __init__(self, text, color):
-        super().__init__()
-
-        # Sets the buttons text
-        self.setText(text)
-
-        # Sets the minimum button size
-        self.setMinimumSize(200, 50)
-
-        # Sets the color for the button
-        self.setAutoFillBackground(True)
-        self.setStyleSheet("background-color: " + str(color))
+from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
+from Widgets.Adjusted_Widgets import BasicButton
 
 # Extends the main window
 
@@ -40,10 +22,10 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
 
         # Creates the button objects
-        ascii_Button = BaseButton("ASCII Mapping", "green")
-        edgeButton = BaseButton("Edge Mapping", "orange")
-        button3 = BaseButton("3", "blue")
-        exitButton = BaseButton("Exit", "red")
+        ascii_Button = BasicButton("ASCII Mapping", "green", width=200, height=50)
+        edgeButton = BasicButton("Edge Mapping", "orange", width=200, height=50)
+        button3 = BasicButton("3", "blue", width=200, height=50)
+        exitButton = BasicButton("Exit", "red", width=200, height=50)
 
         # Add the button to the window
         layout.addWidget(ascii_Button)
