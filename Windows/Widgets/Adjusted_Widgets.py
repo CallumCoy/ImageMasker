@@ -22,7 +22,10 @@ class BasicButton(QPushButton):
 
         # Sets the color for the button
         self.setAutoFillBackground(True)
-        self.setStyleSheet("background-color: " + str(color))
+        self.setStyleSheet("""
+            font-family: Titillium;
+            font-size: 18px;
+            background-color: """ + str(color))
 
 
 class BaseLabel(QLabel):
@@ -80,10 +83,16 @@ class BrowseBar(BaseLabel):
         """)
 
         searchBar = QLineEdit()
-        browseButton = QPushButton()
+        browseButton = BasicButton("Browse", "light grey", width=80, height=50)
         browseButton.setText("Browse")
 
-        fileBrowserLayout = QHBoxLayout()
+        searchBar.setClearButtonEnabled(True)
+        searchBar.setStyleSheet("""
+            font-family: Titillium;
+            font-size: 18px;
+        """)
+
+        fileBrowserLayout = QVBoxLayout()
         fileBrowserLayout.addWidget(searchBar)
         fileBrowserLayout.addWidget(browseButton)
         self.setLayout(fileBrowserLayout)
@@ -120,11 +129,11 @@ class ButtonHolder(BaseLabel):
         super().__init__()
 
         # Creating the buttons.
-        applyButton = BasicButton("apply", "lime-green", width=80, height=50)
-        saveButton = BasicButton("save", "yellow", width=80, height=50)
-        randomButton = BasicButton("random", "purple", width=80, height=50)
-        resetButton = BasicButton("Reset", "white", width=80, height=50)
-        backButton = BasicButton("back", "red", width=80, height=50)
+        applyButton = BasicButton("Apply", "light grey", width=80, height=50)
+        saveButton = BasicButton("Save", "light grey", width=80, height=50)
+        randomButton = BasicButton("Random", "light grey", width=80, height=50)
+        resetButton = BasicButton("Swap", "light grey", width=80, height=50)
+        backButton = BasicButton("Back", "light grey", width=80, height=50)
 
         # Assigning the buttons to the widget.
         layout = QHBoxLayout()
