@@ -1,8 +1,10 @@
+import re
 from PyQt6.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
-PYTHON_IMAGE = "Images\\pythonImage.jpg"
+
+DEFAULT_IMAGE = SELECTED_IMAGE = "Images\\pythonImage.jpg"
 
 # Extends the base button class
 
@@ -27,6 +29,19 @@ class BasicButton(QPushButton):
             font-size: 18px;
             background-color: """ + str(color))
 
+class FileTextbox(QLineEdit):
+    def __init__(self):
+        super().__init__()
+
+        self.setClearButtonEnabled(True)
+        self.setStyleSheet("""
+            font-family: Titillium;
+            font-size: 18px;
+        """)
+    
+    def textChanged(e):
+        global SELECTED_IMAGE 
+        SELECTED_IMAGE = e
 
 class BaseLabel(QLabel):
 
@@ -82,15 +97,9 @@ class BrowseBar(BaseLabel):
             color: #FFFFFF;
         """)
 
-        searchBar = QLineEdit()
+        searchBar = FileTextbox()
         browseButton = BasicButton("Browse", "light grey", width=80, height=50)
         browseButton.setText("Browse")
-
-        searchBar.setClearButtonEnabled(True)
-        searchBar.setStyleSheet("""
-            font-family: Titillium;
-            font-size: 18px;
-        """)
 
         fileBrowserLayout = QVBoxLayout()
         fileBrowserLayout.addWidget(searchBar)
@@ -148,7 +157,13 @@ class ButtonHolder(BaseLabel):
 class ImageDisp(QLabel):
     def __init__(self):
         super().__init__()
-        pixmap = QPixmap(PYTHON_IMAGE)
+        self.changeImage()
+
+    def changeImage(self, image):
+        image_pattern = re.compile(r'\.(jpg|jpeg|png|gif|bmp|tiff)$', re.IGNORECASE)
+
+        pixmap = QPixmap(image if image_pattern else DEFAULT_IMAGE)
         pixmap = pixmap.scaled(
             self.size(), Qt.AspectRatioMode.KeepAspectRatioByExpanding)
         self.setPixmap(pixmap)
+            
