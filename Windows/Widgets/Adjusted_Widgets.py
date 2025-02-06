@@ -75,14 +75,14 @@ class ToolBar(BaseLabel):
         """)
 
         # Creating the widgets.
-        browseBar = BrowseBar()
-        Options = BaseLabel()
+        self.browseBar = BrowseBar()
+        self.options = BaseLabel()
 
         # Setting up the layout.
-        leftLayout = QVBoxLayout()
-        leftLayout.addWidget(browseBar, 1)
-        leftLayout.addWidget(Options, 6)
-        self.setLayout(leftLayout)
+        self.leftLayout = QVBoxLayout()
+        self.leftLayout.addWidget(self.browseBar, 1)
+        self.leftLayout.addWidget(self.options, 6)
+        self.setLayout(self.leftLayout)
 
 
 class BrowseBar(BaseLabel):
@@ -97,14 +97,14 @@ class BrowseBar(BaseLabel):
             color: #FFFFFF;
         """)
 
-        searchBar = FileTextbox()
-        browseButton = BasicButton("Browse", "light grey", width=80, height=50)
-        browseButton.setText("Browse")
+        self.searchBar = FileTextbox()
+        self.browseButton = BasicButton("Browse", "light grey", width=80, height=50)
+        self.browseButton.setText("Browse")
 
-        fileBrowserLayout = QVBoxLayout()
-        fileBrowserLayout.addWidget(searchBar)
-        fileBrowserLayout.addWidget(browseButton)
-        self.setLayout(fileBrowserLayout)
+        self.fileBrowserLayout = QVBoxLayout()
+        self.fileBrowserLayout.addWidget(self.searchBar)
+        self.fileBrowserLayout.addWidget(self.browseButton)
+        self.setLayout(self.fileBrowserLayout)
 
 
 class Viewer(BaseLabel):
@@ -120,15 +120,15 @@ class Viewer(BaseLabel):
         """)
 
         # Creating Widgets.
-        imageDisplay = ImageDisp()
-        buttonHolder = ButtonHolder()
+        self.imageDisplay = ImageDisp()
+        self.buttonHolder = ButtonHolder()
 
         # Setting up the layout for the right window.
-        rightLayout = QVBoxLayout()
-        rightLayout.addWidget(
-            imageDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
-        rightLayout.addWidget(buttonHolder, 1)
-        self.setLayout(rightLayout)
+        self.rightLayout = QVBoxLayout()
+        self.rightLayout.addWidget(
+            self.imageDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.rightLayout.addWidget(self.buttonHolder, 1)
+        self.setLayout(self.rightLayout)
 
 
 class ButtonHolder(BaseLabel):
@@ -138,20 +138,20 @@ class ButtonHolder(BaseLabel):
         super().__init__()
 
         # Creating the buttons.
-        applyButton = BasicButton("Apply", "light grey", width=80, height=50)
-        saveButton = BasicButton("Save", "light grey", width=80, height=50)
-        randomButton = BasicButton("Random", "light grey", width=80, height=50)
-        resetButton = BasicButton("Swap", "light grey", width=80, height=50)
-        backButton = BasicButton("Back", "light grey", width=80, height=50)
+        self.applyButton = BasicButton("Apply", "light grey", width=80, height=50)
+        self.saveButton = BasicButton("Save", "light grey", width=80, height=50)
+        self.randomButton = BasicButton("Random", "light grey", width=80, height=50)
+        self.resetButton = BasicButton("Swap", "light grey", width=80, height=50)
+        self.backButton = BasicButton("Back", "light grey", width=80, height=50)
 
         # Assigning the buttons to the widget.
-        layout = QHBoxLayout()
-        layout.addWidget(applyButton)
-        layout.addWidget(saveButton)
-        layout.addWidget(randomButton)
-        layout.addWidget(resetButton)
-        layout.addWidget(backButton)
-        self.setLayout(layout)
+        self.layout = QHBoxLayout()
+        self.layout.addWidget(self.applyButton)
+        self.layout.addWidget(self.saveButton)
+        self.layout.addWidget(self.randomButton)
+        self.layout.addWidget(self.resetButton)
+        self.layout.addWidget(self.backButton)
+        self.setLayout(self.layout)
 
 
 class ImageDisp(QLabel):

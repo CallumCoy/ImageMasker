@@ -20,20 +20,19 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 100, 1200, 800)
 
         # Sets left right window layout.
-        overallLayout = QHBoxLayout()
+        self.overallLayout = QHBoxLayout()
 
-        leftWindow = ToolBar()
-        rightWindow = Viewer()
+        self.leftWindow = ToolBar()
+        self.rightWindow = Viewer()
 
-        overallLayout.addWidget(leftWindow, 1)
-        overallLayout.addWidget(rightWindow, 2)
+        self.overallLayout.addWidget(self.leftWindow, 1)
+        self.overallLayout.addWidget(self.rightWindow, 2)
 
         # sets up the main widget.
 
-        widget = QWidget()
-        widget.setLayout(overallLayout)
-        self.setCentralWidget(widget)
-
+        self.widget = QWidget()
+        self.widget.setLayout(self.overallLayout)
+        self.setCentralWidget(self.widget)
 
 def main():
     app = QApplication(sys.argv)
