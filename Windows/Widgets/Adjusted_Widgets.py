@@ -29,8 +29,10 @@ class BasicButton(QPushButton):
             font-size: 18px;
             background-color: """ + str(color))
 
+
 class FileTextbox(QLineEdit):
     textEntered = pyqtSignal(bool)
+
     def __init__(self):
         super().__init__()
 
@@ -39,10 +41,11 @@ class FileTextbox(QLineEdit):
             font-family: Titillium;
             font-size: 18px;
         """)
-    
+
     def textChanged(e):
-        global SELECTED_IMAGE 
+        global SELECTED_IMAGE
         SELECTED_IMAGE = e
+
 
 class BaseLabel(QLabel):
 
@@ -66,6 +69,7 @@ class BaseLabel(QLabel):
 class ToolBar(BaseLabel):
     applyClicked = pyqtSignal(str)
     # Inilitialising.
+
     def __init__(self):
         super().__init__()
 
@@ -115,6 +119,7 @@ class BrowseBar(BaseLabel):
     def emitImageDir(self):
         self.applyClicked.emit(self.searchBar.text())
 
+
 class fileBrowserButtons(BaseLabel):
     applyClicked = pyqtSignal(bool)
 
@@ -131,7 +136,7 @@ class fileBrowserButtons(BaseLabel):
             "Browse", "light grey", width=80, height=50)
         self.applyButton = BasicButton(
             "Apply", "light grey", width=80, height=50)
-        
+
         self.browserButtonsLayout = QHBoxLayout()
         self.browserButtonsLayout.addWidget(self.browseButton)
         self.browserButtonsLayout.addWidget(self.applyButton)
@@ -178,7 +183,6 @@ class Viewer(BaseLabel):
         self.imageDisplay.changeImage(imageDir)
 
 
-
 class ButtonHolder(BaseLabel):
     applybuttonClicked = pyqtSignal(bool)
     savebuttonClicked = pyqtSignal(bool)
@@ -191,11 +195,16 @@ class ButtonHolder(BaseLabel):
         super().__init__()
 
         # Creating the buttons.
-        self.applyButton = BasicButton("Apply", "light grey", width=80, height=50)
-        self.saveButton = BasicButton("Save", "light grey", width=80, height=50)
-        self.randomButton = BasicButton("Random", "light grey", width=80, height=50)
-        self.resetButton = BasicButton("Swap", "light grey", width=80, height=50)
-        self.backButton = BasicButton("Back", "light grey", width=80, height=50)
+        self.applyButton = BasicButton(
+            "Apply", "light grey", width=80, height=50)
+        self.saveButton = BasicButton(
+            "Save", "light grey", width=80, height=50)
+        self.randomButton = BasicButton(
+            "Random", "light grey", width=80, height=50)
+        self.resetButton = BasicButton(
+            "Swap", "light grey", width=80, height=50)
+        self.backButton = BasicButton(
+            "Back", "light grey", width=80, height=50)
 
         # Assigning the buttons to the widget.
         self.layout = QHBoxLayout()
@@ -212,22 +221,22 @@ class ButtonHolder(BaseLabel):
         self.resetButton.clicked.connect(self.resetbuttonClicked)
         self.backButton.clicked.connect(self.backbuttonClicked)
 
-class ImageDisp(QLabel):
 
+class ImageDisp(QLabel):
 
     def __init__(self):
         super().__init__()
 
-        #Makes sure the image doesn't get smaller over time, TODO look into size cap.
+        # Makes sure the image doesn't get smaller over time, TODO look into size cap.
         self.initialSize = self.size()
         self.changeImage(DEFAULT_IMAGE)
 
     def changeImage(self, image):
-        #Checks if the image is valid.
-        pixmap = QPixmap(DEFAULT_IMAGE) if QPixmap(image).isNull() else QPixmap(image)
+        # Checks if the image is valid.
+        pixmap = QPixmap(DEFAULT_IMAGE) if QPixmap(
+            image).isNull() else QPixmap(image)
 
-        #Scales the image using the original sizing.
+        # Scales the image using the original sizing.
         pixmap = pixmap.scaled(
             self.initialSize, Qt.AspectRatioMode.KeepAspectRatio)
         self.setPixmap(pixmap)
-            

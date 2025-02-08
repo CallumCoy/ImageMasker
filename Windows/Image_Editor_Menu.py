@@ -5,11 +5,10 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
 from Widgets.Adjusted_Widgets import ToolBar, Viewer
 
 
-
 # Extends the main window.
 class MainWindow(QMainWindow):
 
-    #Inilitialising.
+    # Inilitialising.
     def __init__(self):
         super().__init__()
 
@@ -41,7 +40,6 @@ class MainWindow(QMainWindow):
         self.rightWindow.randombuttonClicked.connect(self.randomButton)
         self.rightWindow.resetbuttonClicked.connect(self.resetButton)
         self.rightWindow.backbuttonClicked.connect(self.backButton)
-
 
     def changeImage(self, text):
         self.rightWindow.changeImage(text)
