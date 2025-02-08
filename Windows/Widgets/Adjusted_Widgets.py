@@ -119,7 +119,11 @@ class BrowseBar(BaseLabel):
         self.buttonClicked.emit(self.searchBar.text())  
 
 class Viewer(BaseLabel):
-    buttonClicked = pyqtSignal(object)
+    applybuttonClicked = pyqtSignal(bool)
+    savebuttonClicked = pyqtSignal(bool)
+    randombuttonClicked = pyqtSignal(bool)
+    resetbuttonClicked = pyqtSignal(bool)
+    backbuttonClicked = pyqtSignal(bool)
 
     # Inilitialising.
     def __init__(self):
@@ -141,6 +145,12 @@ class Viewer(BaseLabel):
             self.imageDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
         self.rightLayout.addWidget(self.buttonHolder, 1)
         self.setLayout(self.rightLayout)
+
+        self.buttonHolder.applybuttonClicked.connect(self.applybuttonClicked)
+        self.buttonHolder.savebuttonClicked.connect(self.savebuttonClicked)
+        self.buttonHolder.randombuttonClicked.connect(self.randombuttonClicked)
+        self.buttonHolder.resetbuttonClicked.connect(self.resetbuttonClicked)
+        self.buttonHolder.backbuttonClicked.connect(self.backbuttonClicked)
 
     def changeImage(self, imageDir):
         self.imageDisplay.changeImage(imageDir)

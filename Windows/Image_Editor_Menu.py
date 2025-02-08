@@ -34,10 +34,33 @@ class MainWindow(QMainWindow):
         self.widget.setLayout(self.overallLayout)
         self.setCentralWidget(self.widget)
 
-        self.leftWindow.buttonClicked.connect(self.changeImage)
+        self.leftWindow.applyClicked.connect(self.changeImage)
+
+        self.rightWindow.applybuttonClicked.connect(self.applyButton)
+        self.rightWindow.savebuttonClicked.connect(self.saveButton)
+        self.rightWindow.randombuttonClicked.connect(self.randomButton)
+        self.rightWindow.resetbuttonClicked.connect(self.resetButton)
+        self.rightWindow.backbuttonClicked.connect(self.backButton)
+
 
     def changeImage(self, text):
         self.rightWindow.changeImage(text)
+
+    def backButton(self):
+        print("go back here")
+
+    def resetButton(self):
+        print("resets the settings")
+
+    def applyButton(self):
+        print("apply the settings to the midified image")
+
+    def randomButton(self):
+        print("set random values to the toolbar")
+
+    def saveButton(self):
+        print("save mofified image")
+
 
 def main():
     app = QApplication(sys.argv)
