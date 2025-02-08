@@ -53,7 +53,7 @@ class BaseLabel(QLabel):
             font-family: Titillium;
             font-size: 18px;
         """)
-        
+
         self.show()
 
 
@@ -99,7 +99,7 @@ class BrowseBar(BaseLabel):
         self.browseButtons.applyClicked.connect(self.emitImageDir)
 
     def emitImageDir(self):
-        self.applyClicked.emit(self.searchBar.text())
+        self.applyClicked.emit(self.searchBar.text().replace('"', ''))
 
 
 class fileBrowserButtons(BaseLabel):
