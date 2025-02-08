@@ -55,14 +55,10 @@ class BaseLabel(QLabel):
 
         # Sets styling for the labels.
         self.setStyleSheet("""
-            background-color: #262626;
-            color: #FFFFFF;
             font-family: Titillium;
             font-size: 18px;
         """)
-
-        # Enables the background for the labels.
-        self.setAutoFillBackground(True)
+        
         self.show()
 
 
@@ -72,12 +68,6 @@ class ToolBar(BaseLabel):
 
     def __init__(self):
         super().__init__()
-
-        # Setting up the background.
-        self.setStyleSheet("""
-            background-color: #262626;
-            color: #FFFFFF;
-        """)
 
         # Creating the widgets.
         self.browseBar = BrowseBar()
@@ -101,10 +91,6 @@ class BrowseBar(BaseLabel):
         super().__init__()
 
         # Setting up the background.
-        self.setStyleSheet("""
-            background-color: #202020;
-            color: #FFFFFF;
-        """)
 
         self.searchBar = FileTextbox()
         self.browseButtons = fileBrowserButtons()
@@ -127,10 +113,6 @@ class fileBrowserButtons(BaseLabel):
         super().__init__()
 
         # Setting up the background.
-        self.setStyleSheet("""
-            background-color: #202020;
-            color: #FFFFFF;
-        """)
 
         self.browseButton = BasicButton(
             "Browse", "light grey", width=80, height=50)
@@ -157,10 +139,6 @@ class Viewer(BaseLabel):
         super().__init__()
 
         # Setting up the background.
-        self.setStyleSheet("""
-            background-color: #262626;
-            color: #FFFFFF;
-        """)
 
         # Creating Widgets.
         self.imageDisplay = ImageDisp()
