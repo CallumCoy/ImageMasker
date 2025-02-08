@@ -42,11 +42,6 @@ class FileTextbox(QLineEdit):
             font-size: 18px;
         """)
 
-    def textChanged(e):
-        global SELECTED_IMAGE
-        SELECTED_IMAGE = e
-
-
 class BaseLabel(QLabel):
 
     # Inilitialising.
@@ -100,6 +95,7 @@ class BrowseBar(BaseLabel):
         self.fileBrowserLayout.addWidget(self.browseButtons)
         self.setLayout(self.fileBrowserLayout)
 
+        self.searchBar.returnPressed.connect(self.emitImageDir)
         self.browseButtons.applyClicked.connect(self.emitImageDir)
 
     def emitImageDir(self):
