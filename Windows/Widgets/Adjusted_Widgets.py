@@ -1,10 +1,10 @@
 import re
 from PyQt6.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 
 
-DEFAULT_IMAGE = SELECTED_IMAGE = "Images\\pythonImage.jpg"
+DEFAULT_IMAGE = SELECTED_IMAGE = "C:\\Users\\gamec\\Downloads\\121017.jpg"
 
 # Extends the base button class
 
@@ -30,6 +30,7 @@ class BasicButton(QPushButton):
             background-color: """ + str(color))
 
 class FileTextbox(QLineEdit):
+    textEntered = pyqtSignal(bool)
     def __init__(self):
         super().__init__()
 
@@ -63,7 +64,7 @@ class BaseLabel(QLabel):
 
 
 class ToolBar(BaseLabel):
-
+    buttonClicked = pyqtSignal(str)
     # Inilitialising.
     def __init__(self):
         super().__init__()
@@ -84,8 +85,14 @@ class ToolBar(BaseLabel):
         self.leftLayout.addWidget(self.options, 6)
         self.setLayout(self.leftLayout)
 
+        self.browseBar.buttonClicked.connect(self.buttonClicked)
+
+
+
 
 class BrowseBar(BaseLabel):
+    buttonClicked = pyqtSignal(str)
+    textEntered = pyqtSignal(bool)
 
     # Inilitialising.
     def __init__(self):
@@ -106,8 +113,13 @@ class BrowseBar(BaseLabel):
         self.fileBrowserLayout.addWidget(self.browseButton)
         self.setLayout(self.fileBrowserLayout)
 
+        self.browseButton.clicked.connect(self.emitImageDir)
+
+    def emitImageDir(self):
+        self.buttonClicked.emit(self.searchBar.text())  
 
 class Viewer(BaseLabel):
+    buttonClicked = pyqtSignal(object)
 
     # Inilitialising.
     def __init__(self):
@@ -130,8 +142,17 @@ class Viewer(BaseLabel):
         self.rightLayout.addWidget(self.buttonHolder, 1)
         self.setLayout(self.rightLayout)
 
+    def changeImage(self, imageDir):
+        self.imageDisplay.changeImage(imageDir)
+
+
 
 class ButtonHolder(BaseLabel):
+    applybuttonClicked = pyqtSignal(bool)
+    savebuttonClicked = pyqtSignal(bool)
+    randombuttonClicked = pyqtSignal(bool)
+    resetbuttonClicked = pyqtSignal(bool)
+    backbuttonClicked = pyqtSignal(bool)
 
     # Inilitialising.
     def __init__(self):
@@ -153,17 +174,28 @@ class ButtonHolder(BaseLabel):
         self.layout.addWidget(self.backButton)
         self.setLayout(self.layout)
 
+        self.applyButton.clicked.connect(self.applybuttonClicked)
+        self.saveButton.clicked.connect(self.savebuttonClicked)
+        self.randomButton.clicked.connect(self.randombuttonClicked)
+        self.resetButton.clicked.connect(self.resetbuttonClicked)
+        self.backButton.clicked.connect(self.backbuttonClicked)
 
 class ImageDisp(QLabel):
+
+
     def __init__(self):
         super().__init__()
-        self.changeImage()
+
+        #Makes sure the image doesn't get smaller over time, TODO look into size cap.
+        self.initialSize = self.size()
+        self.changeImage(DEFAULT_IMAGE)
 
     def changeImage(self, image):
-        image_pattern = re.compile(r'\.(jpg|jpeg|png|gif|bmp|tiff)$', re.IGNORECASE)
+        #Checks if the image is valid.
+        pixmap = QPixmap(DEFAULT_IMAGE) if QPixmap(image).isNull() else QPixmap(image)
 
-        pixmap = QPixmap(image if image_pattern else DEFAULT_IMAGE)
+        #Scales the image using the original sizing.
         pixmap = pixmap.scaled(
-            self.size(), Qt.AspectRatioMode.KeepAspectRatioByExpanding)
+            self.initialSize, Qt.AspectRatioMode.KeepAspectRatio)
         self.setPixmap(pixmap)
             

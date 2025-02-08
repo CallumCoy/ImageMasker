@@ -34,6 +34,11 @@ class MainWindow(QMainWindow):
         self.widget.setLayout(self.overallLayout)
         self.setCentralWidget(self.widget)
 
+        self.leftWindow.buttonClicked.connect(self.changeImage)
+
+    def changeImage(self, text):
+        self.rightWindow.changeImage(text)
+
 def main():
     app = QApplication(sys.argv)
     window = MainWindow()
