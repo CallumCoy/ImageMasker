@@ -64,7 +64,7 @@ class BaseLabel(QLabel):
 
 
 class ToolBar(BaseLabel):
-    buttonClicked = pyqtSignal(str)
+    applyClicked = pyqtSignal(str)
     # Inilitialising.
     def __init__(self):
         super().__init__()
@@ -85,13 +85,11 @@ class ToolBar(BaseLabel):
         self.leftLayout.addWidget(self.options, 6)
         self.setLayout(self.leftLayout)
 
-        self.browseBar.buttonClicked.connect(self.buttonClicked)
-
-
+        self.browseBar.applyClicked.connect(self.applyClicked)
 
 
 class BrowseBar(BaseLabel):
-    buttonClicked = pyqtSignal(str)
+    applyClicked = pyqtSignal(str)
     textEntered = pyqtSignal(bool)
 
     # Inilitialising.
@@ -105,18 +103,42 @@ class BrowseBar(BaseLabel):
         """)
 
         self.searchBar = FileTextbox()
-        self.browseButton = BasicButton("Browse", "light grey", width=80, height=50)
-        self.browseButton.setText("Browse")
+        self.browseButtons = fileBrowserButtons()
 
         self.fileBrowserLayout = QVBoxLayout()
         self.fileBrowserLayout.addWidget(self.searchBar)
-        self.fileBrowserLayout.addWidget(self.browseButton)
+        self.fileBrowserLayout.addWidget(self.browseButtons)
         self.setLayout(self.fileBrowserLayout)
 
-        self.browseButton.clicked.connect(self.emitImageDir)
+        self.browseButtons.applyClicked.connect(self.emitImageDir)
 
     def emitImageDir(self):
-        self.buttonClicked.emit(self.searchBar.text())  
+        self.applyClicked.emit(self.searchBar.text())
+
+class fileBrowserButtons(BaseLabel):
+    applyClicked = pyqtSignal(bool)
+
+    def __init__(self):
+        super().__init__()
+
+        # Setting up the background.
+        self.setStyleSheet("""
+            background-color: #202020;
+            color: #FFFFFF;
+        """)
+
+        self.browseButton = BasicButton(
+            "Browse", "light grey", width=80, height=50)
+        self.applyButton = BasicButton(
+            "Apply", "light grey", width=80, height=50)
+        
+        self.browserButtonsLayout = QHBoxLayout()
+        self.browserButtonsLayout.addWidget(self.browseButton)
+        self.browserButtonsLayout.addWidget(self.applyButton)
+        self.setLayout(self.browserButtonsLayout)
+
+        self.applyButton.clicked.connect(self.applyClicked)
+
 
 class Viewer(BaseLabel):
     applybuttonClicked = pyqtSignal(bool)
