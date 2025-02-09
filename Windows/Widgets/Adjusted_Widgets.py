@@ -1,5 +1,5 @@
 import re
-from PyQt6.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QGridLayout, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QDoubleSpinBox, QScrollArea, QAbstractScrollArea
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, pyqtSignal
 
@@ -42,11 +42,32 @@ class FileTextbox(QLineEdit):
             font-size: 18px;
         """)
 
+
+class ToolNumbox(QDoubleSpinBox):
+    numberChange = pyqtSignal(str)
+
+    def __init__(self, min=0, max=1, tag=None):
+        super().__init__()
+
+        # Setting min and maxes.
+        self.setMinimum(min)
+        self.setMaximum(max)
+        self.tag = tag
+        self.setSingleStep((max-min) / 100)
+
+        self.textChanged.connect(self.changeRange)
+
+    # If it has a tag send out a call to get the associated values changed.
+    def changeRange(self):
+        if self.tag:
+            self.numberChange.emit(self.tag)
+
+
 class BaseLabel(QLabel):
 
     # Inilitialising.
     def __init__(self):
-        super().__init__()
+        super().__init__(text="")
 
         # Sets styling for the labels.
         self.setStyleSheet("""
@@ -66,7 +87,7 @@ class ToolBar(BaseLabel):
 
         # Creating the widgets.
         self.browseBar = BrowseBar()
-        self.options = BaseLabel()
+        self.options = Tools()
 
         # Setting up the layout.
         self.leftLayout = QVBoxLayout()
@@ -75,6 +96,55 @@ class ToolBar(BaseLabel):
         self.setLayout(self.leftLayout)
 
         self.browseBar.applyClicked.connect(self.applyClicked)
+
+
+class Tools(BaseLabel):
+    settingsApply = pyqtSignal(str)
+
+    def __init__(self):
+        super().__init__()
+
+        # Creates the inputs.
+        self.minValueCutoff = ToolNumbox(tag="minValueCutoff")
+        self.maxCutoffPercent = ToolNumbox(tag="maxCutoffPercent")
+        self.maxWidth = ToolNumbox(min=100, max=400)
+        self.maxHeight = ToolNumbox(min=100, max=400)
+        self.applySettings = BasicButton(
+            "apply", "light grey", width=80, height=50)
+
+        # Sets up the layout.
+        self.toolLayout = QVBoxLayout()
+
+        self.toolLayout.addWidget(self.minValueCutoff)
+        self.toolLayout.addWidget(self.maxCutoffPercent)
+        self.toolLayout.addWidget(self.maxWidth)
+        self.toolLayout.addWidget(self.maxHeight)
+        self.toolLayout.addWidget(self.applySettings)
+
+        self.toolLayout.setContentsMargins(0, 0, 0, 0)
+        self.toolLayout.setSpacing(0)
+
+        self.setLayout(self.toolLayout)
+
+        # Sets the min - max for the cutoof values.
+        self.minValueCutoff.numberChange.connect(self.updateValue)
+        self.maxCutoffPercent.numberChange.connect(self.updateValue)
+
+    # Figures out which values needs adjusthing then calls for the correlating function.
+    def updateValue(self, tag):
+        if tag == "maxCutoffPercent":
+            self.updateMax()
+        elif tag == "minValueCutoff":
+            self.updateMin()
+
+    # Updates the max value.
+    def updateMax(self):
+        print(self.maxCutoffPercent.value())
+        self.minValueCutoff.setMaximum(self.maxCutoffPercent.value())
+
+    # Updates the min value.
+    def updateMin(self):
+        self.maxCutoffPercent.setMinimum(self.minValueCutoff.value())
 
 
 class BrowseBar(BaseLabel):
