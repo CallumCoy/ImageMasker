@@ -1,5 +1,5 @@
 import re
-from PyQt6.QtWidgets import QGridLayout, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QDoubleSpinBox, QScrollArea, QAbstractScrollArea
+from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QDoubleSpinBox, QScrollArea, QAbstractScrollArea
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, pyqtSignal
 
@@ -115,6 +115,7 @@ class Tools(BaseLabel):
         super().__init__()
 
         # Creates the inputs.
+        self.inversePixel = QCheckBox("Inverse Pixels")
         self.maxCutoffPercent = ToolNumbox(
             min= 0,
             max=255,
@@ -129,6 +130,7 @@ class Tools(BaseLabel):
         # Sets up the layout.
         self.toolLayout = QVBoxLayout()
 
+        self.toolLayout.addWidget(self.inversePixel)
         self.toolLayout.addWidget(self.maxCutoffPercent)
         self.toolLayout.addWidget(self.maxWidth)
         self.toolLayout.addWidget(self.maxHeight)
