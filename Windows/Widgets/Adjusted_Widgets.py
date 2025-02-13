@@ -46,14 +46,24 @@ class FileTextbox(QLineEdit):
 class ToolNumbox(QDoubleSpinBox):
     numberChange = pyqtSignal(str)
 
-    def __init__(self, min=0, max=1, tag=None):
+    def __init__(self, min=0, max=1, initialVal= None, tag=None, prefix=None):
         super().__init__()
 
         # Setting min and maxes.
         self.setMinimum(min)
         self.setMaximum(max)
+
+        # Gives it an identifier for when the value is changed
         self.tag = tag
+
+        # Sets the value to change by 1% when the arrows are presssed
         self.setSingleStep((max-min) / 100)
+
+        # Sets the label
+        self.setPrefix(prefix)
+
+        # Sets a default value if given otherwise it is the midpoint of the min and max
+        self.setValue(initialVal if initialVal else ((min+max)/2))
 
         self.textChanged.connect(self.changeRange)
 
@@ -105,17 +115,20 @@ class Tools(BaseLabel):
         super().__init__()
 
         # Creates the inputs.
-        self.minValueCutoff = ToolNumbox(tag="minValueCutoff")
-        self.maxCutoffPercent = ToolNumbox(tag="maxCutoffPercent")
-        self.maxWidth = ToolNumbox(min=100, max=400)
-        self.maxHeight = ToolNumbox(min=100, max=400)
+        self.maxCutoffPercent = ToolNumbox(
+            min= 0,
+            max=255,
+            tag="maxCutoffPercent",
+            prefix="Max Pixal Darkness: ",
+            initialVal=180)
+        self.maxWidth = ToolNumbox(min=100, max=400, prefix="Max Width: ")
+        self.maxHeight = ToolNumbox(min=100, max=400, prefix="Max Height: ")
         self.applySettings = BasicButton(
             "apply", "light grey", width=80, height=50)
 
         # Sets up the layout.
         self.toolLayout = QVBoxLayout()
 
-        self.toolLayout.addWidget(self.minValueCutoff)
         self.toolLayout.addWidget(self.maxCutoffPercent)
         self.toolLayout.addWidget(self.maxWidth)
         self.toolLayout.addWidget(self.maxHeight)
@@ -125,26 +138,6 @@ class Tools(BaseLabel):
         self.toolLayout.setSpacing(0)
 
         self.setLayout(self.toolLayout)
-
-        # Sets the min - max for the cutoof values.
-        self.minValueCutoff.numberChange.connect(self.updateValue)
-        self.maxCutoffPercent.numberChange.connect(self.updateValue)
-
-    # Figures out which values needs adjusthing then calls for the correlating function.
-    def updateValue(self, tag):
-        if tag == "maxCutoffPercent":
-            self.updateMax()
-        elif tag == "minValueCutoff":
-            self.updateMin()
-
-    # Updates the max value.
-    def updateMax(self):
-        print(self.maxCutoffPercent.value())
-        self.minValueCutoff.setMaximum(self.maxCutoffPercent.value())
-
-    # Updates the min value.
-    def updateMin(self):
-        self.maxCutoffPercent.setMinimum(self.minValueCutoff.value())
 
 
 class BrowseBar(BaseLabel):
