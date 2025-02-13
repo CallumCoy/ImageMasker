@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         print("apply the settings to the midified image")
 
     def randomButton(self):
-        print("set random values to the toolbar")
+        self.leftWindow.options.randomValues()
 
     def saveButton(self):
         print("save mofified image")

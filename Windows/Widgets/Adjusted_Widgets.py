@@ -1,7 +1,7 @@
-import re
 from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QDoubleSpinBox, QScrollArea, QAbstractScrollArea
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, pyqtSignal
+import random
 
 
 DEFAULT_IMAGE = SELECTED_IMAGE = "C:\\Users\\gamec\\Downloads\\121017.jpg"
@@ -46,7 +46,7 @@ class FileTextbox(QLineEdit):
 class ToolNumbox(QDoubleSpinBox):
     numberChange = pyqtSignal(str)
 
-    def __init__(self, min=0, max=1, initialVal= None, tag=None, prefix=None):
+    def __init__(self, min=0, max=1, initialVal=None, tag=None, prefix=None):
         super().__init__()
 
         # Setting min and maxes.
@@ -72,9 +72,14 @@ class ToolNumbox(QDoubleSpinBox):
     def changeRange(self):
         if self.tag:
             self.numberChange.emit(self.tag)
-    
+
     def resetValue(self):
         self.setValue(self.initialValue)
+
+    def randomValue(self):
+        # Gets a random value at a factor of 100 so the random values can include decimals.
+        self.setValue(random.randrange(
+            int(self.minimum()*100), int(self.maximum()*100))/100)
 
 
 class BaseLabel(QLabel):
@@ -121,7 +126,7 @@ class Tools(BaseLabel):
         # Creates the inputs.
         self.inversePixel = QCheckBox("Inverse Pixels")
         self.maxPixelDarkness = ToolNumbox(
-            min= 0,
+            min=0,
             max=255,
             tag="maxCutoffPercent",
             prefix="Max Pixal Darkness: ",
@@ -144,13 +149,18 @@ class Tools(BaseLabel):
         self.toolLayout.setSpacing(0)
 
         self.setLayout(self.toolLayout)
-    
+
     def resetValues(self):
         self.inversePixel.setChecked(False)
         self.maxPixelDarkness.resetValue()
         self.maxWidth.resetValue()
         self.maxHeight.resetValue()
 
+    def randomValues(self):
+        self.inversePixel.setChecked(bool(random.randrange(0, 2)))
+        self.maxPixelDarkness.randomValue()
+        self.maxWidth.randomValue()
+        self.maxHeight.randomValue()
 
 
 class BrowseBar(BaseLabel):
