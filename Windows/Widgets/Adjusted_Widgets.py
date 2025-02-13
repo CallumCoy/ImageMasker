@@ -63,7 +63,8 @@ class ToolNumbox(QDoubleSpinBox):
         self.setPrefix(prefix)
 
         # Sets a default value if given otherwise it is the midpoint of the min and max
-        self.setValue(initialVal if initialVal else ((min+max)/2))
+        self.initialValue = initialVal if initialVal else ((min+max)/2)
+        self.setValue(self.initialValue)
 
         self.textChanged.connect(self.changeRange)
 
@@ -71,6 +72,9 @@ class ToolNumbox(QDoubleSpinBox):
     def changeRange(self):
         if self.tag:
             self.numberChange.emit(self.tag)
+    
+    def resetValue(self):
+        self.setValue(self.initialValue)
 
 
 class BaseLabel(QLabel):
@@ -116,7 +120,7 @@ class Tools(BaseLabel):
 
         # Creates the inputs.
         self.inversePixel = QCheckBox("Inverse Pixels")
-        self.maxCutoffPercent = ToolNumbox(
+        self.maxPixelDarkness = ToolNumbox(
             min= 0,
             max=255,
             tag="maxCutoffPercent",
@@ -131,7 +135,7 @@ class Tools(BaseLabel):
         self.toolLayout = QVBoxLayout()
 
         self.toolLayout.addWidget(self.inversePixel)
-        self.toolLayout.addWidget(self.maxCutoffPercent)
+        self.toolLayout.addWidget(self.maxPixelDarkness)
         self.toolLayout.addWidget(self.maxWidth)
         self.toolLayout.addWidget(self.maxHeight)
         self.toolLayout.addWidget(self.applySettings)
@@ -140,6 +144,13 @@ class Tools(BaseLabel):
         self.toolLayout.setSpacing(0)
 
         self.setLayout(self.toolLayout)
+    
+    def resetValues(self):
+        self.inversePixel.setChecked(False)
+        self.maxPixelDarkness.resetValue()
+        self.maxWidth.resetValue()
+        self.maxHeight.resetValue()
+
 
 
 class BrowseBar(BaseLabel):
@@ -241,7 +252,7 @@ class ButtonHolder(BaseLabel):
         self.randomButton = BasicButton(
             "Random", "light grey", width=80, height=50)
         self.resetButton = BasicButton(
-            "Swap", "light grey", width=80, height=50)
+            "Reset", "light grey", width=80, height=50)
         self.backButton = BasicButton(
             "Back", "light grey", width=80, height=50)
 

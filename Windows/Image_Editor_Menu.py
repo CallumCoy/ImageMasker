@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         print("go back here")
 
     def resetButton(self):
-        print("resets the settings")
+        self.leftWindow.options.resetValues()
 
     def applyButton(self):
         print("apply the settings to the midified image")
