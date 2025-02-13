@@ -25,22 +25,22 @@ def main():
     return
 
 
-def scaleImage(image):
+def scaleImage(image, maxWidth = MAX_WIDTH, maxHeight = MAX_HEIGHT):
 
     # Get original diemensions.
     h, w = image.shape[:2]
 
     # No work needed if the image is small enough.
-    if h <= MAX_HEIGHT and w <= MAX_WIDTH:
+    if h <= maxHeight and w <= maxWidth:
         return image
 
     # Setting Ratio
     ratio = h/w
 
-    if (MAX_HEIGHT-h)*ratio < MAX_WIDTH-w:
-        return cv.resize(image, (int(MAX_HEIGHT*ratio), MAX_HEIGHT))
+    if (maxHeight-h)*ratio < maxWidth-w:
+        return cv.resize(image, (int(maxHeight*ratio), maxHeight))
     else:
-        return cv.resize(image, (MAX_WIDTH, int(MAX_WIDTH*ratio)))
+        return cv.resize(image, (maxWidth, int(maxWidth*ratio)))
 
 
 def tilize(image):
@@ -57,10 +57,10 @@ def tilize(image):
     return np.asarray(splitImage, dtype=np.ndarray).reshape([h//3, w//3])
 
 
-def applyThreshold(tiles):
+def applyThreshold(tiles, inverseMode = INVERSE_MODE, maxPixelThreshhold = MAX_THRESHOLD):
     mappedRows = []
 
-    if INVERSE_MODE:
+    if inverseMode:
         black, white = str(0), str(1)
     else:
         white, black = str(0), str(1)
@@ -77,7 +77,7 @@ def applyThreshold(tiles):
             for symbolBit in tile:
                 for pixel in symbolBit:
                     # States the map used to lookup the symbol, and sums up the darkness.
-                    symbolCode += black if pixel < MAX_THRESHOLD else white
+                    symbolCode += black if pixel < maxPixelThreshhold else white
                     darkness += int(pixel)
             mappedTiles.append([symbolCode, darkness])
         mappedRows.append(mappedTiles)
