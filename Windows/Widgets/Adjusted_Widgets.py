@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QDoubleSpinBox, QScrollArea, QAbstractScrollArea
+from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QScrollArea, QAbstractScrollArea
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, pyqtSignal
 import random
@@ -43,7 +43,7 @@ class FileTextbox(QLineEdit):
         """)
 
 
-class ToolNumbox(QDoubleSpinBox):
+class ToolNumbox(QSpinBox):
     numberChange = pyqtSignal(str)
 
     def __init__(self, min=0, max=1, initialVal=None, tag=None, prefix=None):
@@ -57,13 +57,13 @@ class ToolNumbox(QDoubleSpinBox):
         self.tag = tag
 
         # Sets the value to change by 1% when the arrows are presssed
-        self.setSingleStep((max-min) / 100)
+        self.setSingleStep(int((max-min) / 100))
 
         # Sets the label
         self.setPrefix(prefix)
 
         # Sets a default value if given otherwise it is the midpoint of the min and max
-        self.initialValue = initialVal if initialVal else ((min+max)/2)
+        self.initialValue = int(initialVal if initialVal else ((min+max)/2))
         self.setValue(self.initialValue)
 
         self.textChanged.connect(self.changeRange)
