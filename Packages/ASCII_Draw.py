@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-from SymbolTraining import getSymbol
+from Packages.SymbolTraining import getSymbol
 
 
 INVERSE_MODE = False
@@ -10,14 +10,22 @@ MAX_THRESHOLD = 180
 MAX_WIDTH = 300
 MAX_HEIGHT = 900
 
+IMAGE_LOCATION = "C:\\Users\\gamec\\Downloads\\121017.jpg"
+IMG = cv.imread(IMAGE_LOCATION)
 
-def main():
 
-    imageLoc = "C:\\Users\\gamec\\Downloads\\121017.jpg"
-    image = cv.imread(imageLoc)
-    rescaledImage = scaleImage(image)
+def drawAscii(maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT, MaxThreshold=MAX_THRESHOLD, inverseMode=INVERSE_MODE, image=IMG):
 
-    createText(rescaledImage)
+    rescaledImage = scaleImage(image, maxWidth, maxHeight)
+
+    gray = cv.cvtColor(rescaledImage, cv.COLOR_RGB2GRAY)
+    tiles = tilize(gray)
+    mappedImage = applyThreshold(
+        tiles, inverseMode=inverseMode, maxPixelThreshhold=MaxThreshold)
+    ASCIIImage = drawASCII(mappedImage)
+
+    with open("image.txt", "w") as f:
+        f.write(ASCIIImage)
 
     cv.imshow("main", image)
     cv.imshow("edges", rescaledImage)
@@ -25,7 +33,7 @@ def main():
     return
 
 
-def scaleImage(image, maxWidth = MAX_WIDTH, maxHeight = MAX_HEIGHT):
+def scaleImage(image, maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT):
 
     # Get original diemensions.
     h, w = image.shape[:2]
@@ -57,7 +65,7 @@ def tilize(image):
     return np.asarray(splitImage, dtype=np.ndarray).reshape([h//3, w//3])
 
 
-def applyThreshold(tiles, inverseMode = INVERSE_MODE, maxPixelThreshhold = MAX_THRESHOLD):
+def applyThreshold(tiles, inverseMode=INVERSE_MODE, maxPixelThreshhold=MAX_THRESHOLD):
     mappedRows = []
 
     if inverseMode:
@@ -95,16 +103,5 @@ def drawASCII(image):
     return text
 
 
-def createText(image):
-
-    gray = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
-
-    tiles = tilize(gray)
-    mappedImage = applyThreshold(tiles)
-    ASCIIImage = drawASCII(mappedImage)
-
-    with open("image.txt", "w") as f:
-        f.write(ASCIIImage)
-
-
-main()
+if __name__ == "__main__":
+    drawASCII()
