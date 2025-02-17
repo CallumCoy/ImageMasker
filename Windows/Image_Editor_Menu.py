@@ -2,10 +2,12 @@ import sys
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
 
-from Widgets.Adjusted_Widgets import ToolBar, Viewer
-
+from Packages.ASCII_Draw import drawAscii
+from Windows.Widgets.Adjusted_Widgets import ToolBar, Viewer
 
 # Extends the main window.
+
+
 class MainWindow(QMainWindow):
 
     # Inilitialising.
@@ -52,6 +54,10 @@ class MainWindow(QMainWindow):
 
     def applyButton(self):
         print("apply the settings to the midified image")
+        drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
+                  maxHeight=self.leftWindow.options.maxHeight.value(),
+                  MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
+                  inverseMode=self.leftWindow.options.inversePixel.checkState())
 
     def randomButton(self):
         self.leftWindow.options.randomValues()
