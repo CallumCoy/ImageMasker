@@ -98,7 +98,8 @@ class BaseLabel(QLabel):
 
 
 class ToolBar(BaseLabel):
-    applyClicked = pyqtSignal(str)
+    imageSelect = pyqtSignal(str)
+    applyClicked = pyqtSignal(bool)
     # Inilitialising.
 
     def __init__(self):
@@ -114,11 +115,12 @@ class ToolBar(BaseLabel):
         self.leftLayout.addWidget(self.options, 6)
         self.setLayout(self.leftLayout)
 
-        self.browseBar.applyClicked.connect(self.applyClicked)
+        self.browseBar.applyClicked.connect(self.imageSelect)
+        self.options.applyClicked.connect(self.applyClicked)
 
 
 class Tools(BaseLabel):
-    settingsApply = pyqtSignal(str)
+    applyClicked = pyqtSignal(bool)
 
     def __init__(self):
         super().__init__()
@@ -149,6 +151,8 @@ class Tools(BaseLabel):
         self.toolLayout.setSpacing(0)
 
         self.setLayout(self.toolLayout)
+
+        self.applySettings.clicked.connect(self.applyClicked)
 
     def resetValues(self):
         self.inversePixel.setChecked(False)

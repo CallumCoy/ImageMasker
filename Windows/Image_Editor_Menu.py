@@ -35,7 +35,8 @@ class MainWindow(QMainWindow):
         self.widget.setLayout(self.overallLayout)
         self.setCentralWidget(self.widget)
 
-        self.leftWindow.applyClicked.connect(self.changeImage)
+        self.leftWindow.imageSelect.connect(self.changeImage)
+        self.leftWindow.options.applyClicked.connect(self.applyButton)
 
         self.rightWindow.swapButtonClicked.connect(self.swapButton)
         self.rightWindow.savebuttonClicked.connect(self.saveButton)
