@@ -210,7 +210,7 @@ class fileBrowserButtons(BaseLabel):
 
 
 class Viewer(BaseLabel):
-    applybuttonClicked = pyqtSignal(bool)
+    swapButtonClicked = pyqtSignal(bool)
     savebuttonClicked = pyqtSignal(bool)
     randombuttonClicked = pyqtSignal(bool)
     resetbuttonClicked = pyqtSignal(bool)
@@ -233,7 +233,7 @@ class Viewer(BaseLabel):
         self.rightLayout.addWidget(self.buttonHolder, 1)
         self.setLayout(self.rightLayout)
 
-        self.buttonHolder.applybuttonClicked.connect(self.applybuttonClicked)
+        self.buttonHolder.swapButtonClicked.connect(self.swapButtonClicked)
         self.buttonHolder.savebuttonClicked.connect(self.savebuttonClicked)
         self.buttonHolder.randombuttonClicked.connect(self.randombuttonClicked)
         self.buttonHolder.resetbuttonClicked.connect(self.resetbuttonClicked)
@@ -244,7 +244,7 @@ class Viewer(BaseLabel):
 
 
 class ButtonHolder(BaseLabel):
-    applybuttonClicked = pyqtSignal(bool)
+    swapButtonClicked = pyqtSignal(bool)
     savebuttonClicked = pyqtSignal(bool)
     randombuttonClicked = pyqtSignal(bool)
     resetbuttonClicked = pyqtSignal(bool)
@@ -255,8 +255,8 @@ class ButtonHolder(BaseLabel):
         super().__init__()
 
         # Creating the buttons.
-        self.applyButton = BasicButton(
-            "Apply", "light grey", width=80, height=50)
+        self.swapButton = BasicButton(
+            "Swap", "light grey", width=80, height=50)
         self.saveButton = BasicButton(
             "Save", "light grey", width=80, height=50)
         self.randomButton = BasicButton(
@@ -268,14 +268,14 @@ class ButtonHolder(BaseLabel):
 
         # Assigning the buttons to the widget.
         self.layout = QHBoxLayout()
-        self.layout.addWidget(self.applyButton)
+        self.layout.addWidget(self.swapButton)
         self.layout.addWidget(self.saveButton)
         self.layout.addWidget(self.randomButton)
         self.layout.addWidget(self.resetButton)
         self.layout.addWidget(self.backButton)
         self.setLayout(self.layout)
 
-        self.applyButton.clicked.connect(self.applybuttonClicked)
+        self.swapButton.clicked.connect(self.swapButtonClicked)
         self.saveButton.clicked.connect(self.savebuttonClicked)
         self.randomButton.clicked.connect(self.randombuttonClicked)
         self.resetButton.clicked.connect(self.resetbuttonClicked)

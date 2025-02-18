@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
 
         self.leftWindow.applyClicked.connect(self.changeImage)
 
-        self.rightWindow.applybuttonClicked.connect(self.applyButton)
+        self.rightWindow.swapButtonClicked.connect(self.swapButton)
         self.rightWindow.savebuttonClicked.connect(self.saveButton)
         self.rightWindow.randombuttonClicked.connect(self.randomButton)
         self.rightWindow.resetbuttonClicked.connect(self.resetButton)
@@ -45,6 +45,9 @@ class MainWindow(QMainWindow):
 
     def changeImage(self, text):
         self.rightWindow.changeImage(text)
+
+    def swapButton(self):
+        print("Swap image code here.")
 
     def backButton(self):
         print("go back here")
