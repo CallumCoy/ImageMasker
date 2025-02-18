@@ -219,6 +219,7 @@ class Viewer(BaseLabel):
     randombuttonClicked = pyqtSignal(bool)
     resetbuttonClicked = pyqtSignal(bool)
     backbuttonClicked = pyqtSignal(bool)
+    successfulImageChange = pyqtSignal(str)
 
     # Inilitialising.
     def __init__(self):
@@ -242,6 +243,8 @@ class Viewer(BaseLabel):
         self.buttonHolder.randombuttonClicked.connect(self.randombuttonClicked)
         self.buttonHolder.resetbuttonClicked.connect(self.resetbuttonClicked)
         self.buttonHolder.backbuttonClicked.connect(self.backbuttonClicked)
+
+        self.imageDisplay.successfulImageChange.connect(self.successfulImageChange)
 
     def changeImage(self, imageDir):
         self.imageDisplay.changeImage(imageDir)
@@ -287,6 +290,7 @@ class ButtonHolder(BaseLabel):
 
 
 class ImageDisp(QLabel):
+    successfulImageChange = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -304,3 +308,6 @@ class ImageDisp(QLabel):
         pixmap = pixmap.scaled(
             self.initialSize, Qt.AspectRatioMode.KeepAspectRatio)
         self.setPixmap(pixmap)
+
+        self.successfulImageChange.emit(DEFAULT_IMAGE if QPixmap(
+            image).isNull() else image)

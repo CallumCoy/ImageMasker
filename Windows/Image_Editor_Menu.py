@@ -1,5 +1,7 @@
 import sys
 
+import cv2 as cv
+
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
 
 from Packages.ASCII_Draw import drawAscii
@@ -9,6 +11,7 @@ from Windows.Widgets.Adjusted_Widgets import ToolBar, Viewer
 
 
 class MainWindow(QMainWindow):
+    targetImage = None
 
     # Inilitialising.
     def __init__(self):
@@ -44,6 +47,12 @@ class MainWindow(QMainWindow):
         self.rightWindow.resetbuttonClicked.connect(self.resetButton)
         self.rightWindow.backbuttonClicked.connect(self.backButton)
 
+        self.rightWindow.successfulImageChange.connect(self.successfulImageChange)
+
+    def successfulImageChange(self, text):
+        self.targetImage = text
+        print(text)
+
     def changeImage(self, text):
         self.rightWindow.changeImage(text)
 
@@ -60,7 +69,8 @@ class MainWindow(QMainWindow):
         drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
                   maxHeight=self.leftWindow.options.maxHeight.value(),
                   MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
-                  inverseMode=self.leftWindow.options.inversePixel.isChecked())
+                  inverseMode=self.leftWindow.options.inversePixel.isChecked(),
+                  image=cv.imread(self.targetImage))
 
     def randomButton(self):
         self.leftWindow.options.randomValues()
