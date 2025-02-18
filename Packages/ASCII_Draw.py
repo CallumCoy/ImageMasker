@@ -13,6 +13,11 @@ MAX_HEIGHT = 900
 IMAGE_LOCATION = "C:\\Users\\gamec\\Downloads\\121017.jpg"
 IMG = cv.imread(IMAGE_LOCATION)
 
+def main ():
+    
+    print(drawASCII)
+    cv.waitKey(0)
+    return
 
 def drawAscii(maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT, MaxThreshold=MAX_THRESHOLD, inverseMode=INVERSE_MODE, image=IMG):
 
@@ -27,10 +32,7 @@ def drawAscii(maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT, MaxThreshold=MAX_THRESHO
     with open("image.txt", "w") as f:
         f.write(ASCIIImage)
 
-    cv.imshow("main", image)
-    cv.imshow("edges", rescaledImage)
-    cv.waitKey(0)
-    return
+    return ASCIIImage
 
 
 def scaleImage(image, maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT):
@@ -104,4 +106,4 @@ def drawASCII(image):
 
 
 if __name__ == "__main__":
-    drawASCII()
+    main()
