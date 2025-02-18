@@ -57,11 +57,10 @@ class MainWindow(QMainWindow):
         self.leftWindow.options.resetValues()
 
     def applyButton(self):
-        print("apply the settings to the midified image")
         drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
                   maxHeight=self.leftWindow.options.maxHeight.value(),
                   MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
-                  inverseMode=self.leftWindow.options.inversePixel.checkState())
+                  inverseMode=self.leftWindow.options.inversePixel.isChecked())
 
     def randomButton(self):
         self.leftWindow.options.randomValues()
