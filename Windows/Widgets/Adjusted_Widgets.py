@@ -77,9 +77,9 @@ class ToolNumbox(QSpinBox):
         self.setValue(self.initialValue)
 
     def randomValue(self):
-        # Gets a random value at a factor of 100 so the random values can include decimals.
+        # Gets a random value
         self.setValue(random.randrange(
-            int(self.minimum()*100), int(self.maximum()*100))/100)
+            self.minimum(), self.maximum()))
 
 
 class BaseLabel(QLabel):
