@@ -5,13 +5,13 @@ import cv2 as cv
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
 
 from Packages.ASCII_Draw import drawAscii
-from Windows.Widgets.Adjusted_Widgets import ToolBar, Viewer
+from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 
 # Extends the main window.
 
 
 class MainWindow(QMainWindow):
-    targetImage = None
+    targetImage = DEFAULT_IMAGE
 
     # Inilitialising.
     def __init__(self):
