@@ -21,10 +21,6 @@ def main ():
 
 def drawAscii(maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT, MaxThreshold=MAX_THRESHOLD, inverseMode=INVERSE_MODE, image=IMG):
 
-    if image == None:
-        image = IMG
-        # Chatches and exceptions where image is None
-
     rescaledImage = scaleImage(image, maxWidth, maxHeight)
 
     gray = cv.cvtColor(rescaledImage, cv.COLOR_RGB2GRAY)
