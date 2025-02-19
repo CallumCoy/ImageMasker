@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QScrollArea, QAbstractScrollArea
+import sys
+from pathlib import Path
+from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QFileDialog
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, pyqtSignal
 import random
@@ -187,13 +189,20 @@ class BrowseBar(BaseLabel):
 
         self.searchBar.returnPressed.connect(self.emitImageDir)
         self.browseButtons.applyClicked.connect(self.emitImageDir)
+        self.browseButtons.fileSelected.connect(self.inputFileText)
 
     def emitImageDir(self):
         self.applyClicked.emit(self.searchBar.text().replace('"', ''))
 
+    def inputFileText(self, newFile):
+        # Changed the input in the textbar and sends out the command to use the new input.
+        self.searchBar.setText(newFile)
+        self.emitImageDir()
+
 
 class fileBrowserButtons(BaseLabel):
     applyClicked = pyqtSignal(bool)
+    fileSelected = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -211,6 +220,20 @@ class fileBrowserButtons(BaseLabel):
         self.setLayout(self.browserButtonsLayout)
 
         self.applyButton.clicked.connect(self.applyClicked)
+        self.browseButton.clicked.connect(self.open_file_dialog)
+
+    def open_file_dialog(self):
+        # Opens file search directory.
+        filename, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select a File",
+            r"C:\\images\\",
+            "Images (*.png *.jpg)"
+        )
+
+        # If a file name is returned then emit the file selection.
+        if filename:
+            self.fileSelected.emit(filename)
 
 
 class Viewer(BaseLabel):
@@ -244,7 +267,8 @@ class Viewer(BaseLabel):
         self.buttonHolder.resetbuttonClicked.connect(self.resetbuttonClicked)
         self.buttonHolder.backbuttonClicked.connect(self.backbuttonClicked)
 
-        self.imageDisplay.successfulImageChange.connect(self.successfulImageChange)
+        self.imageDisplay.successfulImageChange.connect(
+            self.successfulImageChange)
 
     def changeImage(self, imageDir):
         self.imageDisplay.changeImage(imageDir)
