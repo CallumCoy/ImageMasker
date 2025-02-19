@@ -48,9 +48,9 @@ def scaleImage(image, maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT):
     ratio = h/w
 
     if (maxHeight-h)*ratio < maxWidth-w:
-        return cv.resize(image, (int(maxHeight*ratio), maxHeight))
+        return cv.resize(image, (int(maxHeight*ratio-(maxHeight*ratio)%3), maxHeight-maxHeight%3))
     else:
-        return cv.resize(image, (maxWidth, int(maxWidth*ratio)))
+        return cv.resize(image, (maxWidth - maxWidth%3, int(maxWidth*ratio - (maxWidth*ratio)%3)))
 
 
 def tilize(image):
@@ -63,9 +63,11 @@ def tilize(image):
     splitImage = [np.array_split(block, w//3, axis=1)
                   for block in horizontalSplit]
 
-    # Makes an array then sorts it into a 2d array.
-    return np.asarray(splitImage, dtype=np.ndarray).reshape([h//3, w//3])
-
+    # Makes an array then sorts it into a 2d array if it isn't already.
+    try:
+        return np.asarray(splitImage, dtype=np.ndarray).reshape([h//3, w//3])
+    except ValueError:
+        return splitImage
 
 def applyThreshold(tiles, inverseMode=INVERSE_MODE, maxPixelThreshhold=MAX_THRESHOLD):
     mappedRows = []
