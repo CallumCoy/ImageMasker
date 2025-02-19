@@ -322,6 +322,7 @@ class ImageDisp(QLabel):
         # Makes sure the image doesn't get smaller over time, TODO look into size cap.
         self.initialSize = self.size()
         self.changeImage(DEFAULT_IMAGE)
+        self.successfulImageChange.emit(DEFAULT_IMAGE)
 
     def changeImage(self, image):
         # Checks if the image is valid.
