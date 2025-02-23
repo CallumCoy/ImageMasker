@@ -12,6 +12,7 @@ from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 
 class MainWindow(QMainWindow):
     targetImage = DEFAULT_IMAGE
+    output = None
 
     # Inilitialising.
     def __init__(self):
@@ -47,7 +48,8 @@ class MainWindow(QMainWindow):
         self.rightWindow.resetbuttonClicked.connect(self.resetButton)
         self.rightWindow.backbuttonClicked.connect(self.backButton)
 
-        self.rightWindow.successfulImageChange.connect(self.successfulImageChange)
+        self.rightWindow.successfulImageChange.connect(
+            self.successfulImageChange)
 
     def successfulImageChange(self, text):
         self.targetImage = text
@@ -57,7 +59,10 @@ class MainWindow(QMainWindow):
         self.rightWindow.changeImage(text)
 
     def swapButton(self):
-        print("Swap image code here.")
+        self.rightWindow.imageDisplay.setVisible(
+            not (self.rightWindow.imageDisplay.isVisible()))
+        self.rightWindow.textDisplay.setVisible(
+            not (self.rightWindow.textDisplay.isVisible()))
 
     def backButton(self):
         print("go back here")
@@ -66,11 +71,13 @@ class MainWindow(QMainWindow):
         self.leftWindow.options.resetValues()
 
     def applyButton(self):
-        drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
-                  maxHeight=self.leftWindow.options.maxHeight.value(),
-                  MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
-                  inverseMode=self.leftWindow.options.inversePixel.isChecked(),
-                  image=cv.imread(self.targetImage))
+        self.output = drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
+                                maxHeight=self.leftWindow.options.maxHeight.value(),
+                                MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
+                                inverseMode=self.leftWindow.options.inversePixel.isChecked(),
+                                image=cv.imread(self.targetImage))
+
+        self.rightWindow.textDisplay.setText(self.output)
 
     def randomButton(self):
         self.leftWindow.options.randomValues()

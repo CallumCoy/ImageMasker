@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QFileDialog
+from PyQt6.QtWidgets import QCheckBox, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QFileDialog, QTextEdit
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, pyqtSignal
 import random
@@ -97,6 +97,26 @@ class BaseLabel(QLabel):
         """)
 
         self.show()
+
+
+class BaseTextBox(QTextEdit):
+
+    # Inilitialising.
+    def __init__(self):
+        super().__init__()
+
+        # Sets styling for the labels.
+        self.setStyleSheet("""
+            font-family: Courier;
+            font-size: 4px;
+            white-space: pre;
+        """)
+
+        self.show()
+        self.setReadOnly(True)
+
+        self.setFixedHeight(600)
+        self.setFixedWidth(600)
 
 
 class ToolBar(BaseLabel):
@@ -252,14 +272,19 @@ class Viewer(BaseLabel):
 
         # Creating Widgets.
         self.imageDisplay = ImageDisp()
+        self.textDisplay = BaseTextBox()
         self.buttonHolder = ButtonHolder()
 
         # Setting up the layout for the right window.
         self.rightLayout = QVBoxLayout()
         self.rightLayout.addWidget(
             self.imageDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.rightLayout.addWidget(
+            self.textDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
         self.rightLayout.addWidget(self.buttonHolder, 1)
         self.setLayout(self.rightLayout)
+
+        self.textDisplay.hide()
 
         self.buttonHolder.swapButtonClicked.connect(self.swapButtonClicked)
         self.buttonHolder.savebuttonClicked.connect(self.savebuttonClicked)
