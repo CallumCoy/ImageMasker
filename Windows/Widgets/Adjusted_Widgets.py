@@ -100,6 +100,8 @@ class BaseLabel(QLabel):
 
 
 class BaseTextBox(QTextEdit):
+    maxHeight = 900
+
 
     # Inilitialising.
     def __init__(self):
@@ -108,15 +110,47 @@ class BaseTextBox(QTextEdit):
         # Sets styling for the labels.
         self.setStyleSheet("""
             font-family: Courier;
-            font-size: 4px;
             white-space: pre;
+            align: center;
         """)
 
-        self.show()
+        #Sets the section to be visible, read only, and the base width.
+        self.show() 
         self.setReadOnly(True)
-
-        self.setFixedHeight(600)
         self.setFixedWidth(600)
+
+        #Connects the resize function to the text change event
+        self.textChanged.connect(self.autoResize)
+
+    def autoResize(self):
+        #Sets the width to the texts width.
+        self.document().setTextWidth(self.viewport().width())
+
+        #Sets up the value that may be used as the height for the viewer.
+        margin = self.contentsMargins()
+        height = int(self.document().size().height() + margin.top() + margin.bottom())
+
+        # If the height is greater than the max then just use the max value.
+        if height > self.maxHeight:
+            height = self.maxHeight
+
+        self.setFixedHeight(height)
+
+    def formatText(self):
+
+        #Selects all ext, then applies the fomartting.
+        self.selectAll()
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setFontPointSize(4)
+
+        #Clears the cursor selections so the text isn't selected no longer.
+        textCursor = self.textCursor()
+        textCursor.clearSelection()
+        self.setTextCursor(textCursor)
+        
+    #Overwrites the resize event to the new auto resize function.
+    def resizeEvent(self,e):
+        self.autoResize()
 
 
 class ToolBar(BaseLabel):

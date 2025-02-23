@@ -12,7 +12,7 @@ from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 
 class MainWindow(QMainWindow):
     targetImage = DEFAULT_IMAGE
-    output = None
+    output = "Hi"
 
     # Inilitialising.
     def __init__(self):
@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("The Mapping App")
 
         # Sets the minimum size.
-        self.setGeometry(100, 100, 1200, 800)
+        self.setGeometry(100, 100, 1200, 1000)
 
         # Sets left right window layout.
         self.overallLayout = QHBoxLayout()
@@ -71,14 +71,17 @@ class MainWindow(QMainWindow):
         self.leftWindow.options.resetValues()
 
     def applyButton(self):
+        #Calls the ASCII drawing function and saves the results.
         self.output = drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
                                 maxHeight=self.leftWindow.options.maxHeight.value(),
                                 MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
                                 inverseMode=self.leftWindow.options.inversePixel.isChecked(),
                                 image=cv.imread(self.targetImage))
 
+        #Applies the text to the textbox. then calls for formatting.
         self.rightWindow.textDisplay.setText(self.output)
-
+        self.rightWindow.textDisplay.formatText()
+        
     def randomButton(self):
         self.leftWindow.options.randomValues()
 
