@@ -1,7 +1,7 @@
 import sys
 
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
-from Widgets.Adjusted_Widgets import BasicButton
+from Windows.Widgets.Adjusted_Widgets import BasicButton
 
 # Extends the main window
 
@@ -19,21 +19,38 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(500, 300)
 
         # Sets the layout
-        layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
 
         # Creates the button objects
-        ascii_Button = BasicButton("ASCII Mapping", "green", width=200, height=50)
-        edgeButton = BasicButton("Edge Mapping", "orange", width=200, height=50)
-        button3 = BasicButton("3", "blue", width=200, height=50)
-        exitButton = BasicButton("Exit", "red", width=200, height=50)
+        self.ascii_Button = BasicButton("ASCII Mapping", "green", width=200, height=50)
+        self.edgeButton = BasicButton("Edge Mapping", "orange", width=200, height=50)
+        self.button3 = BasicButton("3", "blue", width=200, height=50)
+        self.exitButton = BasicButton("Exit", "red", width=200, height=50)
 
         # Add the button to the window
-        layout.addWidget(ascii_Button)
-        layout.addWidget(edgeButton)
-        layout.addWidget(button3)
-        layout.addWidget(exitButton)
+        self.layout.addWidget(self.ascii_Button)
+        self.layout.addWidget(self.edgeButton)
+        self.layout.addWidget(self.button3)
+        self.layout.addWidget(self.exitButton)
 
         # Activates widgets and layout.
         widget = QWidget()
-        widget.setLayout(layout)
+        widget.setLayout(self.layout)
         self.setCentralWidget(widget)
+
+        self.ascii_Button.pressed.connect(self.openAsciiMapping)
+        self.edgeButton.pressed.connect(self.openEdgeMapping)
+        self.button3.pressed.connect(self.openOptionThree)
+        self.exitButton.pressed.connect(self.closeButton)
+
+    def openAsciiMapping(self):
+        print("Opene ASCII mapping.")
+    
+    def openEdgeMapping(self):
+        print("Open edge mapping.")
+
+    def openOptionThree(self):
+        print("Open option 3, who know's what it will be")
+
+    def closeButton(self):
+        self.close()

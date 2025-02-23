@@ -10,7 +10,7 @@ from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 # Extends the main window.
 
 
-class MainWindow(QMainWindow):
+class asciiWindowEditor(QMainWindow):
     targetImage = DEFAULT_IMAGE
     output = None
 
@@ -112,7 +112,7 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = asciiWindowEditor()
     window.show()
     sys.exit(app.exec())
 

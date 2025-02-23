@@ -2,7 +2,8 @@ import sys
 
 from PyQt6.QtWidgets import QApplication
 
-from Windows.Image_Editor_Menu import MainWindow
+from Windows.Main_Window import MainWindow
+
 
 
 def main():
