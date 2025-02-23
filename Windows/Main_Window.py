@@ -1,8 +1,6 @@
-import sys
-
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
 from Windows.Ascii_Image_Generator import asciiWindowEditor
-from Windows.Widgets.Adjusted_Widgets import BasicButton
+from Windows.Widgets.General_Adjusted_Widgets import BasicButton
 
 # Extends the main window
 

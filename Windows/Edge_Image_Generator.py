@@ -7,8 +7,7 @@ from PyQt6.QtCore import pyqtSignal
 
 from Packages.ASCII_Draw import drawAscii
 from Packages.CoPilot_ASCII_Map import image_to_ascii
-from Windows.Widgets.General_Adjusted_Widgets import DEFAULT_IMAGE
-from Windows.Widgets.ASCII_Adjusted_Widgets import ToolBar, Viewer
+from Windows.Widgets.General_Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 
 # Extends the main window.
 
