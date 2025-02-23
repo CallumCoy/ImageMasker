@@ -15,7 +15,13 @@ IMG = cv.imread(IMAGE_LOCATION)
 
 def main ():
     
-    print(drawASCII)
+    asciiDrawing = drawASCII
+
+    with open("image.txt", "w") as f:
+        f.write(asciiDrawing)
+
+    print(asciiDrawing)
+
     cv.waitKey(0)
     return
 
@@ -28,9 +34,6 @@ def drawAscii(maxWidth=MAX_WIDTH, maxHeight=MAX_HEIGHT, MaxThreshold=MAX_THRESHO
     mappedImage = applyThreshold(
         tiles, inverseMode=inverseMode, maxPixelThreshhold=MaxThreshold)
     ASCIIImage = drawASCII(mappedImage)
-
-    with open("image.txt", "w") as f:
-        f.write(ASCIIImage)
 
     return ASCIIImage
 
