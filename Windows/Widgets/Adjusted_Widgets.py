@@ -111,7 +111,6 @@ class BaseTextBox(QTextEdit):
         self.setStyleSheet("""
             font-family: Courier;
             white-space: pre;
-            align: center;
         """)
 
         #Sets the section to be visible, read only, and the base width.
