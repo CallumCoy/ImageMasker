@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QDoubleSpinBox, QFileDialog, QTextEdit
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtCore import Qt, pyqtSignal
 import random
 
@@ -320,10 +320,10 @@ class ImageDisp(QLabel):
 
         # Makes sure the image doesn't get smaller over time, TODO look into size cap.
         self.initialSize = self.size()
-        self.changeImage(DEFAULT_IMAGE)
+        self.changeImageDir(DEFAULT_IMAGE)
         self.successfulImageChange.emit(DEFAULT_IMAGE)
 
-    def changeImage(self, image):
+    def changeImageDir(self, image):
         # Checks if the image is valid.
         pixmap = QPixmap(DEFAULT_IMAGE) if QPixmap(
             image).isNull() else QPixmap(image)

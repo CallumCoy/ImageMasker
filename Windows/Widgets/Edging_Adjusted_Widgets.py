@@ -1,8 +1,8 @@
-from PyQt6.QtWidgets import QCheckBox, QVBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 import random
 
-from Windows.Widgets.General_Adjusted_Widgets import BaseLabel, BaseTextBox, BasicButton, BrowseBar, ButtonHolder, ImageDisp, ToolIntBox
+from Windows.Widgets.General_Adjusted_Widgets import BaseLabel, BaseTextBox, BasicButton, BrowseBar, ButtonHolder, ImageDisp, ToolDoubleBox, ToolIntBox
 
 class ToolBar(BaseLabel):
     imageSelect = pyqtSignal(str)
@@ -33,25 +33,28 @@ class Tools(BaseLabel):
         super().__init__()
 
         # Creates the inputs.
-        self.basicVersion = QCheckBox("Basic Ver")
-        self.inversePixel = QCheckBox("Inverse Pixels")
-        self.maxPixelDarkness = ToolIntBox(
+        self.minCutoffPercent = ToolDoubleBox(
             min=0,
-            max=255,
+            max=1,
+            tag="minCutoffPercent",
+            prefix="Min Cut-oof Percent: ",
+            initialVal=0.45)
+        self.maxCutoffPercent = ToolDoubleBox(
+            min=0,
+            max=1,
             tag="maxCutoffPercent",
-            prefix="Max Pixal Darkness: ",
-            initialVal=180)
-        self.maxWidth = ToolIntBox(min=100, max=400, prefix="Max Width: ")
-        self.maxHeight = ToolIntBox(min=100, max=400, prefix="Max Height: ")
+            prefix="Max Cut-off Percent: ",
+            initialVal=0.05)
+        self.maxWidth = ToolIntBox(min=100, max=1400, prefix="Max Width: ")
+        self.maxHeight = ToolIntBox(min=100, max=1400, prefix="Max Height: ")
         self.applySettings = BasicButton(
             "apply", "light grey", width=80, height=50)
 
         # Sets up the layout.
         self.toolLayout = QVBoxLayout()
 
-        self.toolLayout.addWidget(self.basicVersion)
-        self.toolLayout.addWidget(self.inversePixel)
-        self.toolLayout.addWidget(self.maxPixelDarkness)
+        self.toolLayout.addWidget(self.minCutoffPercent)
+        self.toolLayout.addWidget(self.maxCutoffPercent)
         self.toolLayout.addWidget(self.maxWidth)
         self.toolLayout.addWidget(self.maxHeight)
         self.toolLayout.addWidget(self.applySettings)
@@ -64,16 +67,14 @@ class Tools(BaseLabel):
         self.applySettings.clicked.connect(self.applyClicked)
 
     def resetValues(self):
-        self.basicVersion.setChecked(False)
-        self.inversePixel.setChecked(False)
-        self.maxPixelDarkness.resetValue()
+        self.minCutoffPercent.resetValue()
+        self.maxCutoffPercent.resetValue()
         self.maxWidth.resetValue()
         self.maxHeight.resetValue()
 
     def randomValues(self):
-        self.basicVersion.setChecked(bool(random.randrange(0, 2)))
-        self.inversePixel.setChecked(bool(random.randrange(0, 2)))
-        self.maxPixelDarkness.randomValue()
+        self.minCutoffPercent.randomValue()
+        self.maxCutoffPercent.randomValue()
         self.maxWidth.randomValue()
         self.maxHeight.randomValue()
 
@@ -93,7 +94,7 @@ class Viewer(BaseLabel):
 
         # Creating Widgets.
         self.imageDisplay = ImageDisp()
-        self.textDisplay = BaseTextBox()
+        self.outputDisplay = ImageDisp()
         self.buttonHolder = ButtonHolder()
 
         # Setting up the layout for the right window.
@@ -101,11 +102,11 @@ class Viewer(BaseLabel):
         self.rightLayout.addWidget(
             self.imageDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
         self.rightLayout.addWidget(
-            self.textDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
+            self.outputDisplay, 8, alignment=Qt.AlignmentFlag.AlignCenter)
         self.rightLayout.addWidget(self.buttonHolder, 1)
         self.setLayout(self.rightLayout)
 
-        self.textDisplay.hide()
+        self.outputDisplay.hide()
 
         self.buttonHolder.swapButtonClicked.connect(self.swapButtonClicked)
         self.buttonHolder.savebuttonClicked.connect(self.savebuttonClicked)
@@ -118,3 +119,6 @@ class Viewer(BaseLabel):
 
     def changeImage(self, imageDir):
         self.imageDisplay.changeImageDir(imageDir)
+    
+    def changeOutput(self, image):
+        self.imageDisplay.changeImageWithCVImage(image)

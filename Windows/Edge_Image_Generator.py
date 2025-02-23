@@ -1,21 +1,23 @@
+import shutil
 import sys
 
 import cv2 as cv
+from pathlib import Path
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QFileDialog, QMessageBox
 from PyQt6.QtCore import pyqtSignal
 
-from Packages.ASCII_Draw import drawAscii
-from Packages.CoPilot_ASCII_Map import image_to_ascii
-from Windows.Widgets.General_Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
+from Packages.OutlineImage import outline
+from Windows.Widgets.Edging_Adjusted_Widgets import ToolBar, Viewer
+from Windows.Widgets.General_Adjusted_Widgets import DEFAULT_IMAGE
 
 # Extends the main window.
 
 
-class asciiWindowEditor(QMainWindow):
+class edgeWindowEditor(QMainWindow):
     targetImage = DEFAULT_IMAGE
     closed = pyqtSignal(bool)
-    output = None
+    outputDir = None
 
     # Inilitialising.
     def __init__(self):
@@ -23,6 +25,9 @@ class asciiWindowEditor(QMainWindow):
 
         # Sets window name.
         self.setWindowTitle("The Mapping App")
+
+        # Creates a temp location for an image.
+        self.outputDir = (str(Path.cwd())+"\\Images\\output.jpg").replace("\\", "\\\\")
 
         # Sets the minimum size.
         self.setGeometry(100, 100, 1200, 1000)
@@ -56,7 +61,6 @@ class asciiWindowEditor(QMainWindow):
 
     def successfulImageChange(self, text):
         self.targetImage = text
-        print(text)
 
     def changeImage(self, text):
         self.rightWindow.changeImage(text)
@@ -64,8 +68,8 @@ class asciiWindowEditor(QMainWindow):
     def swapButton(self):
         self.rightWindow.imageDisplay.setVisible(
             not (self.rightWindow.imageDisplay.isVisible()))
-        self.rightWindow.textDisplay.setVisible(
-            not (self.rightWindow.textDisplay.isVisible()))
+        self.rightWindow.outputDisplay.setVisible(
+            not (self.rightWindow.outputDisplay.isVisible()))
 
     def backButton(self):
         self.close()
@@ -74,21 +78,17 @@ class asciiWindowEditor(QMainWindow):
         self.leftWindow.options.resetValues()
 
     def applyButton(self):
-        # Calls the ASCII drawing function and saves the results.
-        if self.leftWindow.options.basicVersion.isChecked():
-            self.output = image_to_ascii(self.targetImage,
-                                         new_width=self.leftWindow.options.maxWidth.value()//3,
-                                         inverseMode=self.leftWindow.options.inversePixel.isChecked())
-        else:
-            self.output = drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
-                                    maxHeight=self.leftWindow.options.maxHeight.value(),
-                                    MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
-                                    inverseMode=self.leftWindow.options.inversePixel.isChecked(),
-                                    image=cv.imread(self.targetImage))
+        # Calls the edging function
+        output = outline(imageLoc=self.targetImage,
+                              minCutoff=self.leftWindow.options.minCutoffPercent.value(),
+                              maxCutoff=self.leftWindow.options.maxCutoffPercent.value(),
+                              width=self.leftWindow.options.maxWidth.value(),
+                              height=self.leftWindow.options.maxHeight.value())
+        print(self.outputDir)
+        cv.imwrite(self.outputDir, output)
 
         # Applies the text to the textbox. then calls for formatting.
-        self.rightWindow.textDisplay.setText(self.output)
-        self.rightWindow.textDisplay.formatText()
+        self.rightWindow.outputDisplay.changeImageDir(self.outputDir)
 
     def randomButton(self):
         self.leftWindow.options.randomValues()
@@ -96,16 +96,15 @@ class asciiWindowEditor(QMainWindow):
     def saveButton(self):
 
         # Checks checks the output, if there is something to save then do so, otherwise throw out a basic warning.
-        if self.output:
+        if self.outputDir:
 
             # Opens a dialog to select the save location then uses it to save teh .txt file.
             saveDir, _ = QFileDialog.getSaveFileName(
-                self, 'Save File', r"C:\\images\\", "Text (*.txt)")
+                self, 'Save File', r"C:\\images\\", "Image (*.png, *.jpg)")
 
             # Cancels the process if a locattion wasn't selected.
             if saveDir:
-                with open(saveDir, "w") as f:
-                    f.write(self.output)
+                shutil.copy(self.outputDir, saveDir)
 
         else:
             # Shows an error messages asking the user to press "Apply" before saving.
@@ -123,7 +122,7 @@ class asciiWindowEditor(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    window = asciiWindowEditor()
+    window = edgeWindowEditor()
     window.show()
     sys.exit(app.exec())
 

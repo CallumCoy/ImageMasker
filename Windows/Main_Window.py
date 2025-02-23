@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
 from Windows.Ascii_Image_Generator import asciiWindowEditor
+from Windows.Edge_Image_Generator import edgeWindowEditor
 from Windows.Widgets.General_Adjusted_Widgets import BasicButton
 
 # Extends the main window
@@ -50,7 +51,11 @@ class MainWindow(QMainWindow):
         self.asciiWindow.closed.connect(self.childClosed)
     
     def openEdgeMapping(self):
-        print("Open edge mapping.")
+        self.edgeWindow = edgeWindowEditor()
+        self.edgeWindow.show()
+
+        self.hide()
+        self.edgeWindow.closed.connect(self.childClosed)
 
     def openOptionThree(self):
         print("Open option 3, who know's what it will be")
