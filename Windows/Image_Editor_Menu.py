@@ -3,6 +3,7 @@ import sys
 import cv2 as cv
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QFileDialog, QMessageBox
+from PyQt6.QtCore import pyqtSignal
 
 from Packages.ASCII_Draw import drawAscii
 from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
@@ -12,6 +13,7 @@ from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 
 class asciiWindowEditor(QMainWindow):
     targetImage = DEFAULT_IMAGE
+    closed = pyqtSignal(bool)
     output = None
 
     # Inilitialising.
@@ -65,7 +67,7 @@ class asciiWindowEditor(QMainWindow):
             not (self.rightWindow.textDisplay.isVisible()))
 
     def backButton(self):
-        print("go back here")
+        self.close()
 
     def resetButton(self):
         self.leftWindow.options.resetValues()
@@ -108,6 +110,9 @@ class asciiWindowEditor(QMainWindow):
                 'No file has been created for saving.  Please press "Apply" before trying to save.')
             msg.setWindowTitle("Error")
             msg.exec()
+
+    def closeEvent(self, a0):
+        self.closed.emit(True)
 
 
 def main():

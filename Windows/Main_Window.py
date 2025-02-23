@@ -1,6 +1,7 @@
 import sys
 
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
+from Windows.Image_Editor_Menu import asciiWindowEditor
 from Windows.Widgets.Adjusted_Widgets import BasicButton
 
 # Extends the main window
@@ -44,13 +45,20 @@ class MainWindow(QMainWindow):
         self.exitButton.pressed.connect(self.closeButton)
 
     def openAsciiMapping(self):
-        print("Opene ASCII mapping.")
+        self.asciiWindow = asciiWindowEditor()
+        self.asciiWindow.show()
+
+        self.hide()
+        self.asciiWindow.closed.connect(self.childClosed)
     
     def openEdgeMapping(self):
         print("Open edge mapping.")
 
     def openOptionThree(self):
         print("Open option 3, who know's what it will be")
+
+    def childClosed(self):
+        self.show()
 
     def closeButton(self):
         self.close()
