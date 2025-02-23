@@ -2,7 +2,7 @@ import sys
 
 import cv2 as cv
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QFileDialog, QMessageBox
 
 from Packages.ASCII_Draw import drawAscii
 from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
@@ -12,7 +12,7 @@ from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 
 class MainWindow(QMainWindow):
     targetImage = DEFAULT_IMAGE
-    output = "Hi"
+    output = None
 
     # Inilitialising.
     def __init__(self):
@@ -71,22 +71,43 @@ class MainWindow(QMainWindow):
         self.leftWindow.options.resetValues()
 
     def applyButton(self):
-        #Calls the ASCII drawing function and saves the results.
+        # Calls the ASCII drawing function and saves the results.
         self.output = drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
                                 maxHeight=self.leftWindow.options.maxHeight.value(),
                                 MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
                                 inverseMode=self.leftWindow.options.inversePixel.isChecked(),
                                 image=cv.imread(self.targetImage))
 
-        #Applies the text to the textbox. then calls for formatting.
+        # Applies the text to the textbox. then calls for formatting.
         self.rightWindow.textDisplay.setText(self.output)
         self.rightWindow.textDisplay.formatText()
-        
+
     def randomButton(self):
         self.leftWindow.options.randomValues()
 
     def saveButton(self):
-        print("save mofified image")
+
+        # Checks checks the output, if there is something to save then do so, otherwise throw out a basic warning.
+        if self.output:
+
+            # Opens a dialog to select the save location then uses it to save teh .txt file.
+            saveDir, _ = QFileDialog.getSaveFileName(
+                self, 'Save File', r"C:\\images\\", "Text (*.txt)")
+
+            # Cancels the process if a locattion wasn't selected.
+            if saveDir:
+                with open(saveDir, "w") as f:
+                    f.write(self.output)
+
+        else:
+            # Shows an error messages asking the user to press "Apply" before saving.
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Icon.Warning)
+            msg.setText("No File To Save")
+            msg.setInformativeText(
+                'No file has been created for saving.  Please press "Apply" before trying to save.')
+            msg.setWindowTitle("Error")
+            msg.exec()
 
 
 def main():
