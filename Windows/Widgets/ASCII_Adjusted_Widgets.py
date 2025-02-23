@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QCheckBox, QVBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 import random
 
-from Windows.Widgets.General_Adjusted_Widgets import BaseLabel, BaseTextBox, BasicButton, BrowseBar, ButtonHolder, ImageDisp, ToolNumbox
+from Windows.Widgets.General_Adjusted_Widgets import BaseLabel, BaseTextBox, BasicButton, BrowseBar, ButtonHolder, ImageDisp, ToolIntBox
 
 class ToolBar(BaseLabel):
     imageSelect = pyqtSignal(str)
@@ -35,14 +35,14 @@ class Tools(BaseLabel):
         # Creates the inputs.
         self.basicVersion = QCheckBox("Basic Ver")
         self.inversePixel = QCheckBox("Inverse Pixels")
-        self.maxPixelDarkness = ToolNumbox(
+        self.maxPixelDarkness = ToolIntBox(
             min=0,
             max=255,
             tag="maxCutoffPercent",
             prefix="Max Pixal Darkness: ",
             initialVal=180)
-        self.maxWidth = ToolNumbox(min=100, max=400, prefix="Max Width: ")
-        self.maxHeight = ToolNumbox(min=100, max=400, prefix="Max Height: ")
+        self.maxWidth = ToolIntBox(min=100, max=400, prefix="Max Width: ")
+        self.maxHeight = ToolIntBox(min=100, max=400, prefix="Max Height: ")
         self.applySettings = BasicButton(
             "apply", "light grey", width=80, height=50)
 

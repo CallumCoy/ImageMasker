@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QFileDialog, QTextEdit
+from PyQt6.QtWidgets import QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, QPushButton, QSpinBox, QDoubleSpinBox, QFileDialog, QTextEdit
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, pyqtSignal
 import random
@@ -43,7 +43,7 @@ class FileTextbox(QLineEdit):
         """)
 
 
-class ToolNumbox(QSpinBox):
+class ToolIntBox(QSpinBox):
     numberChange = pyqtSignal(str)
 
     def __init__(self, min=0, max=1, initialVal=None, tag=None, prefix=None):
@@ -80,6 +80,47 @@ class ToolNumbox(QSpinBox):
         # Gets a random value
         self.setValue(random.randrange(
             self.minimum(), self.maximum()))
+
+
+class ToolDoubleBox(QDoubleSpinBox):
+    numberChange = pyqtSignal(str)
+
+    def __init__(self, min=0, max=1, initialVal=None, tag=None, prefix=None):
+
+        super().__init__()
+
+        # Setting min and maxes.
+        self.setMinimum(min)
+        self.setMaximum(max)
+
+        # Gives it an identifier for when the value is changed
+        self.tag = tag
+
+        # Sets the value to change by 1% when the arrows are presssed
+        self.setSingleStep((max-min) / 100)
+
+        # Sets the label
+        self.setPrefix(prefix)
+
+        # Sets a default value if given otherwise it is the midpoint of the min and max
+        self.initialValue = initialVal if initialVal else ((min+max)/2)
+        self.setValue(self.initialValue)
+
+        self.textChanged.connect(self.changeRange)
+
+    # If it has a tag send out a call to get the associated values changed.
+
+    def changeRange(self):
+        if self.tag:
+            self.numberChange.emit(self.tag)
+
+    def resetValue(self):
+        self.setValue(self.initialValue)
+
+    def randomValue(self):
+        # Gets a random value at a factor of 100 so the random values can include decimals.
+        self.setValue(random.randrange(
+            int(self.minimum()*100), int(self.maximum()*100))/100)
 
 
 class BaseLabel(QLabel):
