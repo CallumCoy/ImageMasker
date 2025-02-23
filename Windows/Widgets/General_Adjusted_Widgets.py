@@ -141,8 +141,8 @@ class BaseLabel(QLabel):
 class BaseTextBox(QTextEdit):
     maxHeight = 900
 
-
     # Inilitialising.
+
     def __init__(self):
         super().__init__()
 
@@ -152,21 +152,22 @@ class BaseTextBox(QTextEdit):
             white-space: pre;
         """)
 
-        #Sets the section to be visible, read only, and the base width.
-        self.show() 
+        # Sets the section to be visible, read only, and the base width.
+        self.show()
         self.setReadOnly(True)
         self.setFixedWidth(600)
 
-        #Connects the resize function to the text change event
+        # Connects the resize function to the text change event
         self.textChanged.connect(self.autoResize)
 
     def autoResize(self):
-        #Sets the width to the texts width.
+        # Sets the width to the texts width.
         self.document().setTextWidth(self.viewport().width())
 
-        #Sets up the value that may be used as the height for the viewer.
+        # Sets up the value that may be used as the height for the viewer.
         margin = self.contentsMargins()
-        height = int(self.document().size().height() + margin.top() + margin.bottom())
+        height = int(self.document().size().height() +
+                     margin.top() + margin.bottom())
 
         # If the height is greater than the max then just use the max value.
         if height > self.maxHeight:
@@ -176,18 +177,18 @@ class BaseTextBox(QTextEdit):
 
     def formatText(self):
 
-        #Selects all ext, then applies the fomartting.
+        # Selects all ext, then applies the fomartting.
         self.selectAll()
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setFontPointSize(4)
 
-        #Clears the cursor selections so the text isn't selected no longer.
+        # Clears the cursor selections so the text isn't selected no longer.
         textCursor = self.textCursor()
         textCursor.clearSelection()
         self.setTextCursor(textCursor)
-        
-    #Overwrites the resize event to the new auto resize function.
-    def resizeEvent(self,e):
+
+    # Overwrites the resize event to the new auto resize function.
+    def resizeEvent(self, e):
         self.autoResize()
 
     def resetValues(self):
@@ -270,6 +271,7 @@ class fileBrowserButtons(BaseLabel):
         # If a file name is returned then emit the file selection.
         if filename:
             self.fileSelected.emit(filename)
+
 
 class ButtonHolder(BaseLabel):
     swapButtonClicked = pyqtSignal(bool)
