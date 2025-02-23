@@ -181,6 +181,7 @@ class Tools(BaseLabel):
         super().__init__()
 
         # Creates the inputs.
+        self.basicVersion = QCheckBox("Basic Ver")
         self.inversePixel = QCheckBox("Inverse Pixels")
         self.maxPixelDarkness = ToolNumbox(
             min=0,
@@ -196,6 +197,7 @@ class Tools(BaseLabel):
         # Sets up the layout.
         self.toolLayout = QVBoxLayout()
 
+        self.toolLayout.addWidget(self.basicVersion)
         self.toolLayout.addWidget(self.inversePixel)
         self.toolLayout.addWidget(self.maxPixelDarkness)
         self.toolLayout.addWidget(self.maxWidth)
@@ -210,12 +212,14 @@ class Tools(BaseLabel):
         self.applySettings.clicked.connect(self.applyClicked)
 
     def resetValues(self):
+        self.basicVersion.setChecked(False)
         self.inversePixel.setChecked(False)
         self.maxPixelDarkness.resetValue()
         self.maxWidth.resetValue()
         self.maxHeight.resetValue()
 
     def randomValues(self):
+        self.basicVersion.setChecked(bool(random.randrange(0, 2)))
         self.inversePixel.setChecked(bool(random.randrange(0, 2)))
         self.maxPixelDarkness.randomValue()
         self.maxWidth.randomValue()

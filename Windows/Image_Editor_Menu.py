@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QFi
 from PyQt6.QtCore import pyqtSignal
 
 from Packages.ASCII_Draw import drawAscii
+from Packages.CoPilot_ASCII_Map import image_to_ascii
 from Windows.Widgets.Adjusted_Widgets import DEFAULT_IMAGE, ToolBar, Viewer
 
 # Extends the main window.
@@ -74,11 +75,16 @@ class asciiWindowEditor(QMainWindow):
 
     def applyButton(self):
         # Calls the ASCII drawing function and saves the results.
-        self.output = drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
-                                maxHeight=self.leftWindow.options.maxHeight.value(),
-                                MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
-                                inverseMode=self.leftWindow.options.inversePixel.isChecked(),
-                                image=cv.imread(self.targetImage))
+        if self.leftWindow.options.basicVersion.isChecked():
+            self.output = image_to_ascii(self.targetImage,
+                                         new_width=self.leftWindow.options.maxWidth.value()//3,
+                                         inverseMode=self.leftWindow.options.inversePixel.isChecked())
+        else:
+            self.output = drawAscii(maxWidth=self.leftWindow.options.maxWidth.value(),
+                                    maxHeight=self.leftWindow.options.maxHeight.value(),
+                                    MaxThreshold=self.leftWindow.options.maxPixelDarkness.value(),
+                                    inverseMode=self.leftWindow.options.inversePixel.isChecked(),
+                                    image=cv.imread(self.targetImage))
 
         # Applies the text to the textbox. then calls for formatting.
         self.rightWindow.textDisplay.setText(self.output)

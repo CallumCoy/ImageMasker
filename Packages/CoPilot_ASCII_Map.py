@@ -1,5 +1,4 @@
 from PIL import Image
-import numpy as np
 
 # ASCII characters used to build the output text
 ASCII_CHARS = "@%#*+=-:. "
@@ -13,14 +12,17 @@ def resize_image(image, new_width=100):
 def grayify(image):
     return image.convert("L")
 
-def pixels_to_ascii(image):
+def pixels_to_ascii(image, inverseMode):
     pixels = image.getdata()
     ascii_str = ""
+
+    modifyingVal = 255 if inverseMode else 0
+
     for pixel in pixels:
-        ascii_str += ASCII_CHARS[pixel // 32]
+        ascii_str += ASCII_CHARS[abs(modifyingVal - pixel) // 32]
     return ascii_str
 
-def image_to_ascii(image_path, new_width=100):
+def image_to_ascii(image_path, new_width=100, inverseMode = False):
     # Load the image
     image = Image.open(image_path)
 
@@ -31,7 +33,7 @@ def image_to_ascii(image_path, new_width=100):
     image = resize_image(image, new_width)
 
     # Convert pixels to ASCII characters
-    ascii_str = pixels_to_ascii(image)
+    ascii_str = pixels_to_ascii(image, inverseMode)
     
     # Format the ASCII string into multiple lines
     pixel_count = len(ascii_str)
@@ -39,10 +41,14 @@ def image_to_ascii(image_path, new_width=100):
     
     return ascii_image
 
-# Example usage
-image_path = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"  # Replace with your image path
-ascii_art = image_to_ascii(image_path)
+def main ():
+    # Example usage
+    image_path = "C:\\Users\\gamec\\Downloads\\wallhaven-01pyvv.jpg"  # Replace with your image path
+    ascii_art = image_to_ascii(image_path)
 
-with open("image2.txt", "w") as f:
-    f.write(ascii_art)
+    with open("image2.txt", "w") as f:
+        f.write(ascii_art)
+
+if __name__ == "__main__":
+    main()
 
